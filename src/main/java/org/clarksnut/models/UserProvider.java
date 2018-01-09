@@ -1,6 +1,6 @@
 package org.clarksnut.models;
 
-import java.util.List;
+import org.clarksnut.models.jpa.entity.UserEntity;
 
 public interface UserProvider {
 
@@ -10,44 +10,24 @@ public interface UserProvider {
      * @param username     username of the user
      * @return user created
      */
-    UserModel addUser(String identityID, String providerType, String username);
+    UserEntity addUser(String identityID, String providerType, String username, String offlineToken);
 
     /**
      * @param id auto generated unique identity
      * @return user, in case is not found return null
      */
-    UserModel getUser(String id);
+    UserEntity getUser(String id);
 
     /**
      * @param username username of the user
      * @return user, in case is not found return null
      */
-    UserModel getUserByUsername(String username);
+    UserEntity getUserByUsername(String username);
 
     /**
      * @param identityID a unique identity string that the user generate
      * @return user, in case is not found return null
      */
-    UserModel getUserByIdentityID(String identityID);
+    UserEntity getUserByIdentityID(String identityID);
 
-    /**
-     * @param query query to apply on search operation
-     * @return all users after apply query
-     */
-    List<UserModel> getUsers(QueryModel query);
-
-    /**
-     * @return all users who has offline token
-     */
-    List<UserModel> getUsersWithOfflineToken();
-
-    /**
-     * @return all users who has offline token
-     */
-    List<UserModel> getUsersWithOfflineToken(int offset, int limit);
-
-    /**
-     * @param user bean. All data on user will be updated on the database. Use this on not EJB components. Null Fields will never be changed
-     */
-    void updateUser(UserBean user);
 }
