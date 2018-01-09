@@ -1,0 +1,113 @@
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  name: ${project.artifactId}
+spec:
+  replicas: 1
+  strategy:
+    rollingParams:
+      timeoutSeconds: 10800
+    type: Rolling
+  template:
+    spec:
+      containers:
+      - env:
+        - name: KUBERNETES_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: JAVA_APP_DIR
+          value: /deployments
+        - name: JAVA_OPTIONS
+          value: -Dswarm.project.stage.file=file:///deployments/config/clarksnut-stages.yml -Dswarm.project.stage=production -Dswarm.keycloak.json.path=/deployments/config/keycloak.json
+        - name: CN_HIBERNATE_SHOW_SQL
+          valueFrom:
+            configMapKeyRef:
+              name: clarksnut
+              key: cn.hibernate.show_sql
+        - name: CN_HIBERNATE_FORMAT_SQL
+          valueFrom:
+            configMapKeyRef:
+              name: clarksnut
+              key: cn.hibernate.format_sql
+        - name: CN_HIBERNATE_SECOND_LEVEL_CACHE
+          valueFrom:
+            configMapKeyRef:
+              name: clarksnut
+              key: cn.hibernate.second_level_cache
+        - name: CN_HIBERNATE_INDEX_MANAGER
+          valueFrom:
+            configMapKeyRef:
+              name: clarksnut
+              key: cn.hibernate.index_manager
+        - name: CN_ELASTICSEARCH_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: clarksnut
+              key: cn.elasticsearch.host
+        - name: CN_ELASTICSEARCH_USER
+          valueFrom:
+            secretKeyRef:
+              name: clarksnut
+              key: cn.elasticsearch.user
+        - name: CN_ELASTICSEARCH_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: clarksnut
+              key: cn.elasticsearch.password
+        - name: CN_ELASTICSEARCH_INDEX_SCHEMA_MANAGEMENT_STRATEGY
+          valueFrom:
+            configMapKeyRef:
+              name: clarksnut
+              key: cn.elasticsearch.index_schema_management_strategy
+        - name: CN_ELASTICSEARCH_REQUIRED_INDEX_STATUS
+          valueFrom:
+            configMapKeyRef:
+              name: clarksnut
+              key: cn.elasticsearch.required_index_status
+        - name: CN_ELASTICSEARCH_AWS_ENABLED
+          valueFrom:
+            configMapKeyRef:
+              name: clarksnut
+              key: cn.elasticsearch.aws.enabled
+        - name: CN_ELASTICSEARCH_AWS_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: clarksnut
+              key: cn.elasticsearch.aws.access_key
+        - name: CN_ELASTICSEARCH_AWS_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: clarksnut
+              key: cn.elasticsearch.aws.secret_key
+        - name: CN_ELASTICSEARCH_AWS_REGION
+          valueFrom:
+            configMapKeyRef:
+              name: clarksnut
+              key: cn.elasticsearch.aws.region
+        name: ${project.artifactId}
+        image: ${project.artifactId}:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        securityContext:
+          privileged: false
+        volumeMounts:
+        - name: clarksnut-config
+          mountPath: /deployments/config
+      volumes:
+      - name: clarksnut-config
+        secret:
+          secretName: clarksnut-config
+  triggers:
+  - type: ConfigChange
+  - imageChangeParams:
+      automatic: true
+      containerNames:
+      - ${project.artifactId}
+      from:
+        kind: ImageStreamTag
+        name: ${project.artifactId}:latest
+    type: ImageChange
