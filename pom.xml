@@ -58,46 +58,6 @@
         <version.liquibase.hibernate5>3.6</version.liquibase.hibernate5>
     </properties>
 
-    <url>http://clarksnut.org</url>
-
-    <licenses>
-        <license>
-            <name>Apache License, Version 2.0</name>
-            <url>https://www.apache.org/licenses/LICENSE-2.0</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
-
-    <developers>
-        <developer>
-            <id>carlosthe19916</id>
-            <name>Carlos Feria</name>
-            <email>carlosthe19916@gmail.com</email>
-            <organization>Clarksnut</organization>
-            <roles>
-                <role>project-owner</role>
-            </roles>
-            <timezone>-5</timezone>
-        </developer>
-    </developers>
-
-    <scm>
-        <connection>scm:git:git://github.com/clarksnut/clarksnut-mail-collector.git</connection>
-        <developerConnection>scm:git:git@github.com:clarksnut/clarksnut-mail-collector.git</developerConnection>
-        <url>https://github.com/clarksnut/clarksnut-mail-collector/tree/master/</url>
-    </scm>
-
-    <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-        <repository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-    </distributionManagement>
-
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -112,21 +72,6 @@
                 <groupId>io.fabric8</groupId>
                 <artifactId>fabric8-project-bom-with-platform-deps</artifactId>
                 <version>${fabric8.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>org.keycloak</groupId>
-                <artifactId>keycloak-authz-client</artifactId>
-                <version>${version.keycloak}</version>
-                <scope>test</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>org.arquillian.cube</groupId>
-                <artifactId>arquillian-cube-bom</artifactId>
-                <version>${version.arquillian.cube}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -209,14 +154,6 @@
                             </execution>
                         </executions>
                         <configuration>
-                            <generator>
-                                <includes>
-                                    <include>wildfly-swarm</include>
-                                </includes>
-                                <excludes>
-                                    <exclude>webapp</exclude>
-                                </excludes>
-                            </generator>
                             <resources>
                                 <labels>
                                     <all>
