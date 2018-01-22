@@ -1,5 +1,5 @@
-name: HTTP CRUD - Wildfly Swarm
-description: A simple CRUD applicaiton using Wildfly Swarm
+name: WildFly Swarm - HTTP
+description: Runs a WildFly Swarm HTTP application
 versions:
   - id: community
     name: 2017.10.0 (Community)

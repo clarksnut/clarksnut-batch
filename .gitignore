@@ -1,8 +1,7 @@
 target
 .idea
 *.iml
-.DS_STORE
-/prod.sh
+prod.sh
 /.settings/
 /.classpath
 /.project

@@ -1,5 +1,6 @@
 /*
- * Copyright 2016-2017 Red Hat, Inc, and individual contributors.
+ *
+ *  Copyright 2016-2017 Red Hat, Inc, and individual contributors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -12,16 +13,24 @@
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
+ *
  */
+package io.openshift.booster;
 
-package io.openshift.boosters;
+public class Greeting {
 
-import javax.ws.rs.ApplicationPath;
-import javax.ws.rs.core.Application;
+    private final String content;
 
-/**
- * @author Heiko Braun
- */
-@ApplicationPath("/api")
-public class RestApplication extends Application {
+    public Greeting() {
+        this.content = null;
+    }
+
+    public Greeting(String content) {
+        this.content = content;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
 }
