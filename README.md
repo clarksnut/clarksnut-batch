@@ -1,1 +1,1 @@
-# clarksnut-batch
+# clarksnut-mail-collector

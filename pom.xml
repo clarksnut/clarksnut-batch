@@ -1,4 +1,6 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>io.openshift</groupId>
@@ -8,7 +10,7 @@
 
     <groupId>org.clarksnut</groupId>
     <artifactId>clarksnut-mail-collector</artifactId>
-    <version>1.0-beta-7-SNAPSHOT</version>
+    <version>1.0-beta-1-SNAPSHOT</version>
 
     <packaging>war</packaging>
 
@@ -132,183 +134,18 @@
     </dependencyManagement>
 
     <dependencies>
+        <!-- Java EE 7 dependency -->
         <dependency>
-            <groupId>org.wildfly.swarm</groupId>
-            <artifactId>microprofile</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wildfly.swarm</groupId>
-            <artifactId>ejb</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wildfly.swarm</groupId>
-            <artifactId>jpa</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wildfly.swarm</groupId>
-            <artifactId>datasources</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wildfly.swarm</groupId>
-            <artifactId>bean-validation</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wildfly.swarm</groupId>
-            <artifactId>batch-jberet</artifactId>
-        </dependency>
-
-        <!--Hibernate-->
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-entitymanager</artifactId>
-            <version>${version.hibernate}</version>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+            <version>7.0</version>
             <scope>provided</scope>
         </dependency>
 
-        <!--Liquibase-->
-        <dependency>
-            <groupId>org.liquibase</groupId>
-            <artifactId>liquibase-core</artifactId>
-            <version>${version.liquibase}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.liquibase</groupId>
-            <artifactId>liquibase-cdi</artifactId>
-            <version>${version.liquibase}</version>
-        </dependency>
-
-        <!--Keycloak-->
-        <dependency>
-            <groupId>org.keycloak</groupId>
-            <artifactId>keycloak-admin-client</artifactId>
-            <version>${version.keycloak}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.keycloak</groupId>
-            <artifactId>keycloak-adapter-core</artifactId>
-            <version>${version.keycloak}</version>
-        </dependency>
-
-        <!--Apache commons-->
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-collections4</artifactId>
-            <version>4.1</version>
-        </dependency>
-
-        <!--Gmail-->
-        <dependency>
-            <groupId>com.google.api-client</groupId>
-            <artifactId>google-api-client</artifactId>
-            <version>1.22.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.apis</groupId>
-            <artifactId>google-api-services-gmail</artifactId>
-            <version>v1-rev69-1.22.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.oauth-client</groupId>
-            <artifactId>google-oauth-client-jetty</artifactId>
-            <version>1.22.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.http-client</groupId>
-            <artifactId>google-http-client-jackson2</artifactId>
-            <version>1.22.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.google.oauth-client</groupId>
-            <artifactId>google-oauth-client</artifactId>
-            <version>1.22.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.oauth-client</groupId>
-            <artifactId>google-oauth-client-servlet</artifactId>
-            <version>1.22.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.auth0</groupId>
-            <artifactId>java-jwt</artifactId>
-            <version>3.2.0</version>
-        </dependency>
-
-        <!--Jberet extensions-->
-        <dependency>
-            <groupId>org.jberet</groupId>
-            <artifactId>jberet-core</artifactId>
-            <version>${version.jberet-support}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jberet</groupId>
-            <artifactId>jberet-support</artifactId>
-            <version>${version.jberet-support}</version>
-        </dependency>
-
-        <!-- Proxy utils -->
-        <dependency>
-            <groupId>cglib</groupId>
-            <artifactId>cglib</artifactId>
-            <version>3.2.5</version>
-        </dependency>
-
-        <!--Zip builder-->
-        <dependency>
-            <groupId>org.jodd</groupId>
-            <artifactId>jodd-core</artifactId>
-            <version>3.9.1</version>
-        </dependency>
-
-        <!-- Jdbc drivers -->
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <version>${version.h2}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>${version.postgresql}</version>
-        </dependency>
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>${version.mysql}</version>
-        </dependency>
-
-        <!--Arquillian-->
+        <!-- WildFly Swarm Fractions -->
         <dependency>
             <groupId>org.wildfly.swarm</groupId>
-            <artifactId>arquillian</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss.arquillian.junit</groupId>
-            <artifactId>arquillian-junit-container</artifactId>
-            <version>1.1.12.Final</version>
-            <scope>test</scope>
-        </dependency>
-
-        <!--Test-->
-        <dependency>
-            <groupId>org.assertj</groupId>
-            <artifactId>assertj-core</artifactId>
-            <version>3.8.0</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <version>2.13.0</version>
-            <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.hamcrest</groupId>
-                    <artifactId>hamcrest-core</artifactId>
-                </exclusion>
-            </exclusions>
+            <artifactId>microprofile</artifactId>
         </dependency>
     </dependencies>
 
@@ -340,48 +177,6 @@
         </pluginManagement>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.6.0</version>
-                <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-failsafe-plugin</artifactId>
-                <version>${maven-failsafe-plugin.version}</version>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>${maven-surefire-plugin.version}</version>
-                <configuration>
-                    <classpathDependencyExcludes>
-                        <classpathDependencyExclude>org.arquillian.cube:arquillian-cube-openshift
-                        </classpathDependencyExclude>
-                        <classpathDependencyExclude>org.arquillian.cube:arquillian-cube-kubernetes
-                        </classpathDependencyExclude>
-                    </classpathDependencyExcludes>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <configuration>
-                    <webResources>
-                        <resource>
-                            <directory>src/main/webapp</directory>
-                            <filtering>true</filtering>
-                        </resource>
-                    </webResources>
-                </configuration>
-            </plugin>
-
-            <plugin>
                 <groupId>org.wildfly.swarm</groupId>
                 <artifactId>wildfly-swarm-plugin</artifactId>
                 <version>${version.wildfly.swarm}</version>
@@ -398,88 +193,7 @@
 
     <profiles>
         <profile>
-            <id>liquibase</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.liquibase</groupId>
-                        <artifactId>liquibase-maven-plugin</artifactId>
-                        <version>${version.liquibase}</version>
-                        <configuration>
-                            <changeLogFile>${project.build.directory}/changelog-master.xml</changeLogFile>
-
-                            <url>jdbc:h2:mem:clarksnut;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE</url>
-                            <driver>org.h2.Driver</driver>
-                            <username>sa</username>
-                            <password>sa</password>
-
-                            <diffChangeLogFile>${project.build.directory}/changelog-diff.xml</diffChangeLogFile>
-                            <dropFirst>true</dropFirst>
-                            <referenceUrl>hibernate:spring:org.clarksnut?dialect=org.hibernate.dialect.H2Dialect
-                            </referenceUrl>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <phase>compile</phase>
-                                <goals>
-                                    <goal>diff</goal>
-                                </goals>
-                                <configuration>
-                                    <systemProperties>
-                                        <user.name>carlosthe19916</user.name>
-                                    </systemProperties>
-                                </configuration>
-                            </execution>
-                        </executions>
-                        <dependencies>
-                            <dependency>
-                                <groupId>org.liquibase.ext</groupId>
-                                <artifactId>liquibase-hibernate5</artifactId>
-                                <version>${version.liquibase.hibernate5}</version>
-                            </dependency>
-                            <dependency>
-                                <groupId>org.springframework</groupId>
-                                <artifactId>spring-beans</artifactId>
-                                <version>5.0.2.RELEASE</version>
-                            </dependency>
-                            <dependency>
-                                <groupId>org.springframework.data</groupId>
-                                <artifactId>spring-data-jpa</artifactId>
-                                <version>2.0.2.RELEASE</version>
-                            </dependency>
-                            <dependency>
-                                <groupId>javax.el</groupId>
-                                <artifactId>javax.el-api</artifactId>
-                                <version>3.0.0</version>
-                            </dependency>
-                            <dependency>
-                                <groupId>com.h2database</groupId>
-                                <artifactId>h2</artifactId>
-                                <version>${version.h2}</version>
-                            </dependency>
-                            <dependency>
-                                <groupId>org.hibernate</groupId>
-                                <artifactId>hibernate-validator</artifactId>
-                                <version>${version.hibernate-validator}</version>
-                            </dependency>
-                        </dependencies>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-
-        <profile>
             <id>openshift</id>
-            <dependencies>
-                <dependency>
-                    <groupId>org.wildfly.swarm</groupId>
-                    <artifactId>jgroups</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>org.wildfly.swarm</groupId>
-                    <artifactId>topology-openshift</artifactId>
-                </dependency>
-            </dependencies>
             <build>
                 <plugins>
                     <plugin>
@@ -503,22 +217,14 @@
                                     <exclude>webapp</exclude>
                                 </excludes>
                             </generator>
-                            <enricher>
-                                <config>
-                                    <wildfly-swarm-health-check>
-                                        <path>/</path>
-                                    </wildfly-swarm-health-check>
-                                </config>
-                            </enricher>
-                        
-          <resources>
-            <labels>
-              <all>
-                <space>clarksnut</space>
-              </all>
-            </labels>
-          </resources>
-        </configuration>
+                            <resources>
+                                <labels>
+                                    <all>
+                                        <space>clarksnut</space>
+                                    </all>
+                                </labels>
+                            </resources>
+                        </configuration>
                     </plugin>
                 </plugins>
             </build>
