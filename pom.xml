@@ -1,23 +1,23 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>io.openshift</groupId>
         <artifactId>booster-parent</artifactId>
-        <version>4</version>
+        <version>10</version>
     </parent>
 
-    <groupId>org.sistcoop</groupId>
-    <artifactId>clarksnut-mail-collector</artifactId>
-    <version>1.0.8-SNAPSHOT</version>
-
+    <groupId>io.openshift.boosters</groupId>
+    <artifactId>wfswarm-rest-http-crud</artifactId>
+    <version>8-SNAPSHOT</version>
     <packaging>war</packaging>
 
-    <name>Clarksnut Mail Collector</name>
-    <description>Clarksnut Mail Collector</description>
+    <name>WildFly Swarm Booster - Relational Database Backend Mission</name>
 
     <properties>
-        <version.wildfly.swarm>2018.1.0</version.wildfly.swarm>
+        <version.wildfly.swarm>2017.10.0</version.wildfly.swarm>
         <version.resteasy>3.0.19.Final</version.resteasy>
         <version.arquillian.cube>1.9.2</version.arquillian.cube>
         <version.h2>1.4.187</version.h2>
@@ -34,27 +34,93 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
+            <dependency>
+                <groupId>org.arquillian.cube</groupId>
+                <artifactId>arquillian-cube-bom</artifactId>
+                <version>${version.arquillian.cube}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
     <dependencies>
-        <!-- Java EE 7 dependency -->
-        <dependency>
-            <groupId>javax</groupId>
-            <artifactId>javaee-api</artifactId>
-            <version>7.0</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <!-- WildFly Swarm Fractions -->
         <dependency>
             <groupId>org.wildfly.swarm</groupId>
-            <artifactId>microprofile</artifactId>
+            <artifactId>jaxrs-jsonp</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.wildfly.swarm</groupId>
+            <artifactId>cdi</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.wildfly.swarm</groupId>
+            <artifactId>jpa</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.wildfly.swarm</groupId>
+            <artifactId>monitor</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-client</artifactId>
+            <version>${version.resteasy}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.wildfly.swarm</groupId>
+            <artifactId>arquillian</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.arquillian.junit</groupId>
+            <artifactId>arquillian-junit-container</artifactId>
+            <version>1.1.12.Final</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.arquillian.cube</groupId>
+            <artifactId>arquillian-cube-openshift</artifactId>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>io.undertow</groupId>
+                    <artifactId>undertow-core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-jackson2-provider</artifactId>
+            <version>${version.resteasy}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <classpathDependencyExcludes>
+                        <classpathDependencyExclude>org.arquillian.cube:arquillian-cube-openshift
+                        </classpathDependencyExclude>
+                        <classpathDependencyExclude>org.arquillian.cube:arquillian-cube-kubernetes
+                        </classpathDependencyExclude>
+                    </classpathDependencyExcludes>
+                </configuration>
+            </plugin>
+
             <plugin>
                 <groupId>org.wildfly.swarm</groupId>
                 <artifactId>wildfly-swarm-plugin</artifactId>
@@ -66,6 +132,12 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <arguments>
+                        <argument>-S</argument>
+                        <argument>local</argument>
+                    </arguments>
+                </configuration>
             </plugin>
 
             <plugin>
@@ -79,8 +151,34 @@
 
     <profiles>
         <profile>
+            <id>local</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>com.h2database</groupId>
+                    <artifactId>h2</artifactId>
+                    <version>${version.h2}</version>
+                </dependency>
+            </dependencies>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <systemPropertyVariables>
+                                <swarm.project.stage>local</swarm.project.stage>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
             <id>openshift</id>
-            <activation/>
             <build>
                 <plugins>
                     <plugin>
@@ -111,10 +209,11 @@
                                     </wildfly-swarm-health-check>
                                 </config>
                             </enricher>
+
                             <resources>
                                 <labels>
                                     <all>
-                                        <space>clarksnut</space>
+                                        <space>jan21</space>
                                     </all>
                                 </labels>
                             </resources>
@@ -129,6 +228,13 @@
                     </plugin>
                 </plugins>
             </build>
+            <dependencies>
+                <dependency>
+                    <groupId>org.postgresql</groupId>
+                    <artifactId>postgresql</artifactId>
+                    <version>${version.postgresql}</version>
+                </dependency>
+            </dependencies>
         </profile>
 
         <profile>
@@ -161,8 +267,7 @@
                     </plugin>
                 </plugins>
             </build>
-            <activation/>
         </profile>
-    </profiles>
 
+    </profiles>
 </project>
