@@ -6,7 +6,7 @@ import com.google.api.client.http.BasicAuthentication;
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
-import org.clarksnut.services.resources.KeycloakDeploymentConfig;
+import org.clarksnut.services.KeycloakDeploymentConfig;
 import org.jboss.logging.Logger;
 
 import javax.servlet.ServletException;

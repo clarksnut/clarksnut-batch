@@ -1,5 +1,6 @@
-package org.clarksnut.services.resources;
+package org.clarksnut.services.servlets;
 
+import org.clarksnut.services.KeycloakDeploymentConfig;
 import org.jboss.logging.Logger;
 import org.keycloak.adapters.KeycloakDeployment;
 import org.keycloak.adapters.KeycloakDeploymentBuilder;
@@ -18,9 +19,9 @@ import java.nio.file.Paths;
 import java.util.Optional;
 
 @WebServlet(loadOnStartup = 1)
-public class ClarksnutStartup extends HttpServlet {
+public class Bootstrap extends HttpServlet {
 
-    private static final Logger logger = Logger.getLogger(ClarksnutStartup.class);
+    private static final Logger logger = Logger.getLogger(Bootstrap.class);
 
     @Inject
     @ConfigurationValue("swarm.keycloak.json.path")

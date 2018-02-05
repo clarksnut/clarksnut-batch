@@ -16,9 +16,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet("/authorize_offline_callback")
-public class OAuth2LinkUserOfflineRefreshTokenCallback extends AbstractAuthorizationCodeCallbackServlet {
+public class OAuth2LinkOfflineTokenCallback extends AbstractAuthorizationCodeCallbackServlet {
 
-    private static final Logger logger = Logger.getLogger(OAuth2LinkUserOfflineRefreshTokenCallback.class);
+    private static final Logger logger = Logger.getLogger(OAuth2LinkOfflineTokenCallback.class);
 
     @Inject
     private IStorage storage;
@@ -66,7 +66,7 @@ public class OAuth2LinkUserOfflineRefreshTokenCallback extends AbstractAuthoriza
     @Override
     protected String getRedirectUri(HttpServletRequest req) throws ServletException, IOException {
         String redirect = OAuth2Utils.getRedirect(req);
-        return OAuth2Utils.buildRedirectURL(req, OAuth2LinkUserOfflineRefreshToken.CALLBACK, redirect);
+        return OAuth2Utils.buildRedirectURL(req, OAuth2LinkOfflineToken.CALLBACK, redirect);
     }
 
     @Override

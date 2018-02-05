@@ -10,9 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 @WebServlet("/api/authorize_offline")
-public class OAuth2LinkUserOfflineRefreshToken extends AbstractAuthorizationCodeServlet {
+public class OAuth2LinkOfflineToken extends AbstractAuthorizationCodeServlet {
 
-    private static final Logger logger = Logger.getLogger(OAuth2LinkUserOfflineRefreshToken.class);
+    private static final Logger logger = Logger.getLogger(OAuth2LinkOfflineToken.class);
 
     public static final String CALLBACK = "/api/authorize_offline_callback";
 
