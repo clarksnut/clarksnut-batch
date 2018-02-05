@@ -1,0 +1,9 @@
+{
+  "realm": "${sso.realm:clarksnut}",
+  "auth-server-url": "${sso.auth.server.url:http://localhost:8180/auth}",
+  "ssl-required": "external",
+  "resource": "${sso.clientId:clarksnut-mail-collector-rest-api}",
+  "credentials": {
+    "secret": "${sso.clientSecret}"
+  }
+}
