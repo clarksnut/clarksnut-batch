@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: List
+items:
+- apiVersion: v1
+  kind: Secret
+  metadata:
+    name: clarksnut-mail-collector
+  type: Opaque
+  data:
+    db.user: "Y2xhcmtzbnV0"
+    db.password: "Y2xhcmtzbnV0"
+    db.admin.password: "Y2xhcmtzbnV0"
+- apiVersion: v1
+  kind: Secret
+  type: Opaque
+  metadata:
+    name: clarksnut-mail-collector-config
+  data:
+    clarksnut-stages.yml: cHJvamVjdDoKICBzdGFnZTogcHJvZHVjdGlvbgpzd2FybToKICBkYXRhc291cmNlczoKICAgIGRhdGEtc291cmNlczoKICAgICAgQ2xhcmtzbnV0RFM6CiAgICAgICAgZHJpdmVyLW5hbWU6IHBvc3RncmVzcWwKICAgICAgICB1c2VyLW5hbWU6IGNsYXJrc251dAogICAgICAgIHBhc3N3b3JkOiBjbGFya3NudXQKICAgICAgICBjb25uZWN0aW9uLXVybDogamRiYzpwb3N0Z3Jlc3FsOi8vY2xhcmtzbnV0LW1haWwtY29sbGVjdG9yLWRiOjU0MzIvY2xhcmtzbnV0

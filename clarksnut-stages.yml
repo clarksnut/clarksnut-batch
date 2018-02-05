@@ -1,0 +1,10 @@
+project:
+  stage: production
+swarm:
+  datasources:
+    data-sources:
+      ClarksnutDS:
+        driver-name: postgresql
+        user-name: clarksnut
+        password: clarksnut
+        connection-url: jdbc:postgresql://clarksnut-mail-collector-db:5432/clarksnut
