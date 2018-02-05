@@ -17,7 +17,7 @@
     <name>Clarksnut Mail Collector</name>
 
     <properties>
-        <version.wildfly.swarm>2018.1.0</version.wildfly.swarm>
+        <version.wildfly.swarm>2017.10.0</version.wildfly.swarm>
         <version.arquillian.cube>1.9.2</version.arquillian.cube>
 
         <!--Hibernate-->
@@ -94,7 +94,7 @@
         <dependency>
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-adapter-core</artifactId>
-            <version>3.4.3.Final</version>
+            <version>3.4.0.Final</version>
         </dependency>
 
         <!--Liquibase-->

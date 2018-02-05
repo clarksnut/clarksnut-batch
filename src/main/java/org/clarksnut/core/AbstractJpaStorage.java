@@ -1,8 +1,6 @@
 package org.clarksnut.core;
 
 import org.clarksnut.core.exceptions.StorageException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.persistence.EntityExistsException;
@@ -11,8 +9,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.RollbackException;
 
 public abstract class AbstractJpaStorage {
-
-    private static Logger logger = LoggerFactory.getLogger(AbstractJpaStorage.class);
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -27,10 +23,10 @@ public abstract class AbstractJpaStorage {
         } catch (EntityExistsException e) {
             throw new StorageException(e);
         } catch (RollbackException e) {
-            logger.error(e.getMessage(), e);
+            //logger.error(e.getMessage(), e);
             throw new StorageException(e);
         } catch (Throwable t) {
-            logger.error(t.getMessage(), t);
+            //logger.error(t.getMessage(), t);
             throw new StorageException(t);
         }
     }
@@ -40,7 +36,7 @@ public abstract class AbstractJpaStorage {
             try {
                 entityManager.getTransaction().rollback();
             } catch (Exception e) {
-                logger.error(e.getMessage(), e);
+                //logger.error(e.getMessage(), e);
             }
         }
     }

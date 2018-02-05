@@ -1,12 +1,14 @@
 package org.clarksnut.services.servlets;
 
 import com.google.api.client.auth.oauth2.AuthorizationCodeFlow;
+import com.google.api.client.auth.oauth2.AuthorizationCodeRequestUrl;
 import com.google.api.client.extensions.servlet.auth.oauth2.AbstractAuthorizationCodeServlet;
 import org.jboss.logging.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet("/api/authorize_offline")
@@ -32,4 +34,9 @@ public class OAuth2LinkOfflineToken extends AbstractAuthorizationCodeServlet {
         return null;
     }
 
+    @Override
+    protected void onAuthorization(HttpServletRequest req, HttpServletResponse resp, AuthorizationCodeRequestUrl authorizationUrl) throws ServletException, IOException {
+        authorizationUrl.setState("xyz");
+        super.onAuthorization(req, resp, authorizationUrl);
+    }
 }

@@ -1,6 +1,7 @@
 package org.clarksnut.services.servlets;
 
 import com.google.api.client.auth.oauth2.AuthorizationCodeFlow;
+import com.google.api.client.auth.oauth2.AuthorizationCodeRequestUrl;
 import com.google.api.client.auth.oauth2.AuthorizationCodeResponseUrl;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.servlet.auth.oauth2.AbstractAuthorizationCodeCallbackServlet;
@@ -15,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/authorize_offline_callback")
+@WebServlet("/api/authorize_offline_callback")
 public class OAuth2LinkOfflineTokenCallback extends AbstractAuthorizationCodeCallbackServlet {
 
     private static final Logger logger = Logger.getLogger(OAuth2LinkOfflineTokenCallback.class);
@@ -78,4 +79,5 @@ public class OAuth2LinkOfflineTokenCallback extends AbstractAuthorizationCodeCal
     protected String getUserId(HttpServletRequest req) throws ServletException, IOException {
         return null;
     }
+
 }
