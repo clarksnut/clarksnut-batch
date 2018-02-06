@@ -1,6 +1,6 @@
-package org.clarksnut.services.servlets;
+package org.clarksnut.services;
 
-import org.clarksnut.services.KeycloakDeploymentConfig;
+import org.clarksnut.batchs.BatchScheduler;
 import org.jboss.logging.Logger;
 import org.keycloak.adapters.KeycloakDeployment;
 import org.keycloak.adapters.KeycloakDeploymentBuilder;
@@ -19,13 +19,16 @@ import java.nio.file.Paths;
 import java.util.Optional;
 
 @WebServlet(loadOnStartup = 1)
-public class Bootstrap extends HttpServlet {
+public class ClarksnutBootstrap extends HttpServlet {
 
-    private static final Logger logger = Logger.getLogger(Bootstrap.class);
+    private static final Logger logger = Logger.getLogger(ClarksnutBootstrap.class);
 
     @Inject
     @ConfigurationValue("swarm.keycloak.json.path")
     private Optional<String> keycloakJsonPath;
+
+    @Inject
+    private BatchScheduler batchScheduler;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -53,6 +56,9 @@ public class Bootstrap extends HttpServlet {
         KeycloakDeploymentConfig instance = KeycloakDeploymentConfig.getInstance();
         instance.setDeployment(deployment);
         logger.info("keycloak.json saved on " + KeycloakDeploymentConfig.class.getName());
+
+        // Start batch
+        batchScheduler.init();
     }
 
 }

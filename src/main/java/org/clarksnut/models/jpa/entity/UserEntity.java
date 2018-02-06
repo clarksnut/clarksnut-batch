@@ -26,7 +26,7 @@ import java.util.Set;
         @NamedQuery(name = "getAllUsers", query = "select u from UserEntity u order by u.username"),
         @NamedQuery(name = "getUserByUsername", query = "select u from UserEntity u where u.username = :username"),
         @NamedQuery(name = "getUserByIdentityID", query = "select u from UserEntity u where u.identityID = :identityID"),
-        @NamedQuery(name = "getAllUsersOrderedByCreationDate", query = "select u from UserEntity u order by u.createdAt")
+        @NamedQuery(name = "batch_getAllUsersWithOfflineToken", query = "select u from UserEntity u left join fetch u.linkedBrokers l where u.offlineToken is not null order by u.createdAt")
 })
 public class UserEntity implements CreatableEntity, UpdatableEntity, Serializable {
 
@@ -47,7 +47,6 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
     @Column(name = "username")
     private String username;
 
-    @NotNull
     @Size(max = 2048)
     @Column(name = "offline_token", length = 2048)
     private String offlineToken;

@@ -21,7 +21,7 @@ import java.util.Date;
 @EntityListeners({CreatedAtListener.class, UpdatedAtListener.class})
 @NamedQueries({
         @NamedQuery(name = "getAllLinkedBrokers", query = "select b from UserLinkedBrokerEntity b inner join b.user u order by b.email"),
-        @NamedQuery(name = "getAllLinkedBrokersOrderedByCreationDate", query = "select b from UserLinkedBrokerEntity b inner join b.user u order by b.createdAt")
+        @NamedQuery(name = "batch_getAllLinkedBrokers", query = "select b from UserLinkedBrokerEntity b inner join fetch b.user u order by b.createdAt")
 })
 public class UserLinkedBrokerEntity implements CreatableEntity, UpdatableEntity, Serializable {
 

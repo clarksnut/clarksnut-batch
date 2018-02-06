@@ -1,5 +1,6 @@
 package org.clarksnut.models.jpa;
 
+import org.clarksnut.models.UserModel;
 import org.clarksnut.models.UserProvider;
 import org.clarksnut.models.jpa.entity.UserEntity;
 
@@ -17,39 +18,40 @@ public class JpaUserProvider implements UserProvider {
     private EntityManager em;
 
     @Override
-    public UserEntity addUser(String identityID, String providerType, String username, String offlineToken) {
+    public UserModel addUser(String identityID, String providerType, String username) {
         UserEntity entity = new UserEntity();
 
         entity.setId(UUID.randomUUID().toString());
         entity.setIdentityID(identityID);
         entity.setProviderType(providerType);
         entity.setUsername(username);
-        entity.setOfflineToken(offlineToken);
 
         em.persist(entity);
-        return entity;
+        return new UserAdapter(em, entity);
     }
 
     @Override
-    public UserEntity getUser(String userId) {
-        return em.find(UserEntity.class, userId);
+    public UserModel getUser(String userId) {
+        UserEntity entity = em.find(UserEntity.class, userId);
+        if (entity == null) return null;
+        return new UserAdapter(em, entity);
     }
 
     @Override
-    public UserEntity getUserByUsername(String username) {
+    public UserModel getUserByUsername(String username) {
         TypedQuery<UserEntity> query = em.createNamedQuery("getUserByUsername", UserEntity.class);
         query.setParameter("username", username);
         List<UserEntity> entities = query.getResultList();
         if (entities.size() == 0) return null;
-        return entities.get(0);
+        return new UserAdapter(em, entities.get(0));
     }
 
     @Override
-    public UserEntity getUserByIdentityID(String identityID) {
+    public UserModel getUserByIdentityID(String identityID) {
         TypedQuery<UserEntity> query = em.createNamedQuery("getUserByIdentityID", UserEntity.class);
         query.setParameter("identityID", identityID);
         List<UserEntity> entities = query.getResultList();
         if (entities.size() == 0) return null;
-        return entities.get(0);
+        return new UserAdapter(em, entities.get(0));
     }
 }

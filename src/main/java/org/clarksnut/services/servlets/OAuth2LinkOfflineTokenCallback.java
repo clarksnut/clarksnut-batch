@@ -1,83 +1,68 @@
 package org.clarksnut.services.servlets;
 
-import com.google.api.client.auth.oauth2.AuthorizationCodeFlow;
-import com.google.api.client.auth.oauth2.AuthorizationCodeRequestUrl;
-import com.google.api.client.auth.oauth2.AuthorizationCodeResponseUrl;
-import com.google.api.client.auth.oauth2.Credential;
-import com.google.api.client.extensions.servlet.auth.oauth2.AbstractAuthorizationCodeCallbackServlet;
-import org.clarksnut.core.IStorage;
+import org.clarksnut.models.UserModel;
 import org.clarksnut.models.UserProvider;
 import org.jboss.logging.Logger;
+import org.keycloak.KeycloakPrincipal;
+import org.keycloak.KeycloakSecurityContext;
+import org.keycloak.adapters.RefreshableKeycloakSecurityContext;
+import org.keycloak.jose.jws.JWSInputException;
+import org.keycloak.representations.AccessToken;
+import org.keycloak.representations.RefreshToken;
+import org.keycloak.util.TokenUtil;
 
 import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 import java.io.IOException;
 
-@WebServlet("/api/authorize_offline_callback")
-public class OAuth2LinkOfflineTokenCallback extends AbstractAuthorizationCodeCallbackServlet {
+@Transactional
+@WebServlet("/api/auth/authorize_offline_callback")
+public class OAuth2LinkOfflineTokenCallback extends HttpServlet {
 
     private static final Logger logger = Logger.getLogger(OAuth2LinkOfflineTokenCallback.class);
-
-    @Inject
-    private IStorage storage;
 
     @Inject
     private UserProvider userProvider;
 
     @Override
-    protected void onSuccess(HttpServletRequest req, HttpServletResponse resp, Credential credential) throws ServletException, IOException {
-        String redirect = OAuth2Utils.getRedirect(req);
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String redirect = req.getParameter("redirect");
 
-        String accessToken = credential.getAccessToken();
-        /*DecodedJWT decodedJWT = JWT.decode(credential.getAccessToken());
-        String identityID = decodedJWT.getClaim("userID").asString();
-
+        // Token
+        String refreshToken;
+        RefreshToken refreshTokenDecoded;
         try {
-            storage.beginTx();
+            RefreshableKeycloakSecurityContext ctx = (RefreshableKeycloakSecurityContext) req.getAttribute(KeycloakSecurityContext.class.getName());
+            refreshToken = ctx.getRefreshToken();
 
-            UserModel user = this.userProvider.getUserByIdentityID(kcUserID);
-            if (user == null) {
-                user = this.userProvider.addUser(kcUserID, "kc", kcUsername);
+            refreshTokenDecoded = TokenUtil.getRefreshToken(refreshToken);
+            Boolean isOfflineToken = refreshTokenDecoded.getType().equals(TokenUtil.TOKEN_TYPE_OFFLINE);
+            if (!isOfflineToken) {
+                throw new ServletException("Token obtained is not offline");
             }
+        } catch (JWSInputException e) {
+            throw new ServletException(e);
+        }
 
-            UserBean bean = new UserBean();
-            bean.setIdentityID(identityID);
-            bean.setOfflineToken(credential.getRefreshToken());
-            bean.setRegistrationComplete(true);
-            userProvider.updateUser(bean);
+        // User
+        KeycloakPrincipal<KeycloakSecurityContext> principal = (KeycloakPrincipal<KeycloakSecurityContext>) req.getUserPrincipal();
+        AccessToken accessToken = principal.getKeycloakSecurityContext().getToken();
+        String kcUserID = principal.getName();
+        String kcUsername = accessToken.getPreferredUsername();
 
-            storage.commitTx();
-        } catch (StorageException e) {
-            storage.rollbackTx();
-            throw new SystemErrorException(e);
-        }*/
+        UserModel user = userProvider.getUserByUsername(kcUsername);
+        if (user == null) {
+            user = userProvider.addUser(kcUserID, "kc", kcUsername);
+        }
+        user.setOfflineToken(refreshToken);
 
+        // Result
         resp.sendRedirect(redirect);
-    }
-
-    @Override
-    protected void onError(HttpServletRequest req, HttpServletResponse resp, AuthorizationCodeResponseUrl errorResponse) throws ServletException, IOException {
-        String redirect = OAuth2Utils.getRedirect(req);
-        resp.sendRedirect(redirect + "?error=could not get token");
-    }
-
-    @Override
-    protected String getRedirectUri(HttpServletRequest req) throws ServletException, IOException {
-        String redirect = OAuth2Utils.getRedirect(req);
-        return OAuth2Utils.buildRedirectURL(req, OAuth2LinkOfflineToken.CALLBACK, redirect);
-    }
-
-    @Override
-    protected AuthorizationCodeFlow initializeFlow() throws IOException {
-        return OAuth2Utils.getAuthorizationCodeFlow(Constants.SCOPES);
-    }
-
-    @Override
-    protected String getUserId(HttpServletRequest req) throws ServletException, IOException {
-        return null;
     }
 
 }

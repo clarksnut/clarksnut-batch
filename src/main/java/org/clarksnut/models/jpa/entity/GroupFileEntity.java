@@ -1,25 +1,18 @@
 package org.clarksnut.models.jpa.entity;
 
-import org.clarksnut.common.jpa.CreatableEntity;
-import org.clarksnut.common.jpa.CreatedAtListener;
-import org.clarksnut.common.jpa.UpdatableEntity;
-import org.clarksnut.common.jpa.UpdatedAtListener;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "cl_group_file")
-@EntityListeners({CreatedAtListener.class, UpdatedAtListener.class})
 @NamedQueries({
-        @NamedQuery(name = "getAllNotSentGroupFilesOrderedByCreationDate", query = "select g from GroupFileEntity g where g.sended = false order by g.createdAt")
+        @NamedQuery(name = "getAllNotSentGroupFiles", query = "select g from GroupFileEntity g where g.sended = false")
 })
-public class GroupFileEntity implements CreatableEntity, UpdatableEntity, Serializable {
+public class GroupFileEntity implements Serializable {
 
     @Id
     @Access(AccessType.PROPERTY)
@@ -32,16 +25,6 @@ public class GroupFileEntity implements CreatableEntity, UpdatableEntity, Serial
 
     @OneToMany(mappedBy = "group", fetch = FetchType.LAZY)
     private Set<GroupFileSendEventEntity> sendEvents = new HashSet<>();
-
-    @NotNull
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_at")
-    private Date createdAt;
-
-    @NotNull
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "updated_at")
-    private Date updatedAt;
 
     @Version
     @Column(name = "version")
@@ -69,24 +52,6 @@ public class GroupFileEntity implements CreatableEntity, UpdatableEntity, Serial
 
     public void setSendEvents(Set<GroupFileSendEventEntity> sendEvents) {
         this.sendEvents = sendEvents;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    @Override
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    @Override
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
     }
 
     public int getVersion() {

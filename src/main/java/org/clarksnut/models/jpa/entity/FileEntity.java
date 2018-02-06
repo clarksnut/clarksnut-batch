@@ -14,7 +14,8 @@ import java.util.Date;
 @Table(name = "cl_file")
 @EntityListeners({CreatedAtListener.class, UpdatedAtListener.class})
 @NamedQueries({
-        @NamedQuery(name = "getAllNotGroupedFilesOrderedByCreationDate", query = "select f from FileEntity f where f.group is null order by f.createdAt")
+        @NamedQuery(name = "getAllNotGroupedFiles", query = "select f from FileEntity f where f.group is null"),
+        @NamedQuery(name = "batch_getAllNotGroupedFiles", query = "select f from FileEntity f where f.group is null order by f.createdAt")
 })
 public class FileEntity implements CreatableEntity, UpdatableEntity, Serializable {
 
