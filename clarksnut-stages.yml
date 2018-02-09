@@ -15,7 +15,7 @@ clarksnut:
         applicationName: "Clarksnut"
   scheduler:
     pull:
-      interval: 60
+      interval: 3600
     send:
       size: 50
 ---
