@@ -3,8 +3,8 @@ apiVersion: v1
 kind: Template
 metadata:
   labels:
-    app: clarksnut-mail-collector-dependencies
-  name: clarksnut-mail-collector-dependencies
+    app: clarksnut-mail-collector
+  name: clarksnut-mail-collector
 objects:
 - apiVersion: v1
   kind: Service

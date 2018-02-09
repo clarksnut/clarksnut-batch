@@ -1,18 +1,17 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
-    <changeSet author="carlosthe19916 (generated)" id="1517956945122-1">
+    <changeSet author="carlosthe19916@gmail.com" id="1.0.0.Final">
         <createTable tableName="cl_file">
             <column name="id" type="VARCHAR(36)">
                 <constraints nullable="false"/>
             </column>
             <column name="created_at" type="TIMESTAMP"/>
             <column name="file" type="BLOB"/>
+            <column name="filename" type="VARCHAR(255)"/>
             <column name="updated_at" type="TIMESTAMP"/>
             <column name="version" type="INT"/>
             <column name="user_id" type="VARCHAR(36)"/>
         </createTable>
-    </changeSet>
-    <changeSet author="carlosthe19916 (generated)" id="1517956945122-2">
         <createTable tableName="cl_group_file">
             <column name="id" type="VARCHAR(36)">
                 <constraints nullable="false"/>
@@ -20,8 +19,6 @@
             <column name="sended" type="CHAR(255)"/>
             <column name="version" type="INT"/>
         </createTable>
-    </changeSet>
-    <changeSet author="carlosthe19916 (generated)" id="1517956945122-3">
         <createTable tableName="cl_send_event">
             <column name="id" type="VARCHAR(36)">
                 <constraints nullable="false"/>
@@ -31,8 +28,6 @@
             <column name="send_date" type="TIMESTAMP"/>
             <column name="send_event_id" type="VARCHAR(36)"/>
         </createTable>
-    </changeSet>
-    <changeSet author="carlosthe19916 (generated)" id="1517956945122-4">
         <createTable tableName="cl_user">
             <column name="id" type="VARCHAR(36)">
                 <constraints nullable="false"/>
@@ -45,8 +40,6 @@
             <column name="username" type="VARCHAR(255)"/>
             <column name="version" type="INT"/>
         </createTable>
-    </changeSet>
-    <changeSet author="carlosthe19916 (generated)" id="1517956945122-5">
         <createTable tableName="cl_user_linked_broker">
             <column name="id" type="VARCHAR(36)">
                 <constraints nullable="false"/>
@@ -59,41 +52,17 @@
             <column name="version" type="INT"/>
             <column name="user_id" type="VARCHAR(36)"/>
         </createTable>
-    </changeSet>
-    <changeSet author="carlosthe19916 (generated)" id="1517956945122-6">
         <addPrimaryKey columnNames="id" constraintName="cl_filePK" tableName="cl_file"/>
-    </changeSet>
-    <changeSet author="carlosthe19916 (generated)" id="1517956945122-7">
         <addPrimaryKey columnNames="id" constraintName="cl_group_filePK" tableName="cl_group_file"/>
-    </changeSet>
-    <changeSet author="carlosthe19916 (generated)" id="1517956945122-8">
         <addPrimaryKey columnNames="id" constraintName="cl_send_eventPK" tableName="cl_send_event"/>
-    </changeSet>
-    <changeSet author="carlosthe19916 (generated)" id="1517956945122-9">
         <addPrimaryKey columnNames="id" constraintName="cl_userPK" tableName="cl_user"/>
-    </changeSet>
-    <changeSet author="carlosthe19916 (generated)" id="1517956945122-10">
         <addPrimaryKey columnNames="id" constraintName="cl_user_linked_brokerPK" tableName="cl_user_linked_broker"/>
-    </changeSet>
-    <changeSet author="carlosthe19916 (generated)" id="1517956945122-11">
         <addUniqueConstraint columnNames="email" constraintName="UK4321ui7wypp7fok89qufbu8nn" tableName="cl_user_linked_broker"/>
-    </changeSet>
-    <changeSet author="carlosthe19916 (generated)" id="1517956945122-12">
         <addUniqueConstraint columnNames="user_id, type" constraintName="UKa912un4erfg315hjve6nygo8j" tableName="cl_user_linked_broker"/>
-    </changeSet>
-    <changeSet author="carlosthe19916 (generated)" id="1517956945122-13">
         <addUniqueConstraint columnNames="identity_id" constraintName="UKj02cpo2pptija0ujdlickuyoa" tableName="cl_user"/>
-    </changeSet>
-    <changeSet author="carlosthe19916 (generated)" id="1517956945122-14">
         <addUniqueConstraint columnNames="username" constraintName="UKo2u1kvk0249ki7q84ggorljc6" tableName="cl_user"/>
-    </changeSet>
-    <changeSet author="carlosthe19916 (generated)" id="1517956945122-15">
         <addForeignKeyConstraint baseColumnNames="send_event_id" baseTableName="cl_send_event" constraintName="FK16stx9bss31p3be72i2j2b05u" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="cl_group_file"/>
-    </changeSet>
-    <changeSet author="carlosthe19916 (generated)" id="1517956945122-16">
         <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="cl_user_linked_broker" constraintName="FK1lmua2lan6w0kpnegq2lbl1el" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="cl_user"/>
-    </changeSet>
-    <changeSet author="carlosthe19916 (generated)" id="1517956945122-17">
         <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="cl_file" constraintName="FK2inp04dta2slysowb1wnhj8wv" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="cl_group_file"/>
     </changeSet>
 </databaseChangeLog>

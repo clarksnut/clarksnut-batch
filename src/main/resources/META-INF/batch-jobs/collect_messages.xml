@@ -16,7 +16,7 @@
                 <writer ref="refreshLinkedBrokersWriter"/>
             </chunk>
         </step>
-        <step id="pullMailMessages" next="groupFiles">
+        <step id="pullMailMessages">
             <chunk>
                 <reader ref="jpaItemReader">
                     <properties>
@@ -28,28 +28,6 @@
                 <writer ref="pullMailMessagesWriter"/>
             </chunk>
         </step>
-        <step id="groupFiles">
-            <chunk>
-                <reader ref="jpaItemReader">
-                    <properties>
-                        <property name="namedQuery" value="batch_getAllNotGroupedFiles"/>
-                        <property name="beanType" value="org.clarksnut.models.jpa.entity.FileEntity"/>
-                    </properties>
-                </reader>
-                <writer ref="groupFilesWriter"/>
-            </chunk>
-        </step>
-        <!--<step id="sendGroupFiles">-->
-            <!--<chunk>-->
-                <!--<reader ref="jpaItemReader">-->
-                    <!--<properties>-->
-                        <!--<property name="namedQuery" value="getAllNotSentGroupFiles"/>-->
-                        <!--<property name="beanType" value="org.clarksnut.models.jpa.entity.GroupFileEntity"/>-->
-                    <!--</properties>-->
-                <!--</reader>-->
-                <!--<writer ref="groupFilesWriter"/>-->
-            <!--</chunk>-->
-        <!--</step>-->
     </flow>
     <step id="end">
         <batchlet ref="endBatchlet"/>

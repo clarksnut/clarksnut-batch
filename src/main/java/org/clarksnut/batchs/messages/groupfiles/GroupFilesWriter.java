@@ -38,6 +38,7 @@ public class GroupFilesWriter extends JpaItemWriter {
         for (List<FileEntity> partition : partitions) {
             GroupFileEntity fileGroupEntity = new GroupFileEntity();
             fileGroupEntity.setId(UUID.randomUUID().toString());
+            fileGroupEntity.setSended(false);
             em.persist(fileGroupEntity);
 
             partition.forEach(fileEntity -> {

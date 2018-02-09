@@ -43,8 +43,11 @@ public class PullMailMessagesProcessor implements ItemProcessor {
             for (MailUblMessageModel message : messages) {
                 byte[] xml = message.getXml();
                 if (XmlValidator.test(xml)) {
+                    String id = UUID.randomUUID().toString();
+
                     FileEntity fileEntity = new FileEntity();
-                    fileEntity.setId(UUID.randomUUID().toString());
+                    fileEntity.setId(id);
+                    fileEntity.setFilename(id + ".xml");
                     fileEntity.setFile(xml);
 
                     result.get(entity).add(fileEntity);

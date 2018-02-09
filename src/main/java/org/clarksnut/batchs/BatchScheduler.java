@@ -19,6 +19,10 @@ public class BatchScheduler {
     @ConfigurationValue("clarksnut.scheduler.pull.interval")
     private Optional<Integer> clarksnutSchedulerPullInterval;
 
+    @Inject
+    @ConfigurationValue("clarksnut.document.apiUrl")
+    private Optional<String> clarksnutDocumentApiUrl;
+
     @Resource
     private ManagedScheduledExecutorService scheduler;
 
@@ -27,13 +31,20 @@ public class BatchScheduler {
         Integer interval = clarksnutSchedulerPullInterval.orElse(60);
 
         // Default 5 seconds of delay
-        scheduler.scheduleAtFixedRate(this::invokeBatchs, 5, interval, TimeUnit.SECONDS);
+        scheduler.scheduleAtFixedRate(this::collectMessages, 5, interval, TimeUnit.SECONDS);
+        scheduler.scheduleAtFixedRate(this::sendMessages, 30, interval, TimeUnit.SECONDS);
     }
 
-    private void invokeBatchs() {
-        JobOperator jobOperator = BatchRuntime.getJobOperator();
+    private void collectMessages() {
+        BatchRuntime.getJobOperator().start("collect_messages", new Properties());
+    }
+
+    private void sendMessages() {
+        String apiUrl = clarksnutDocumentApiUrl.orElse("http://localhost:8080/api/documents");
         Properties properties = new Properties();
-        long execID = jobOperator.start("collect_messages", properties);
+        properties.put("clarksnutDocumentApiUrl", apiUrl);
+
+        BatchRuntime.getJobOperator().start("send_messages", properties);
     }
 
 }

@@ -18,8 +18,12 @@ spec:
               fieldPath: metadata.namespace
         - name: JAVA_APP_DIR
           value: /deployments
+        - name: SSO_AUTH_SERVER_URL
+          value: ${SSO_AUTH_SERVER_URL}
+        - name: SSO_AUTH_CLIENT_SECRET
+          value: ${SSO_AUTH_CLIENT_SECRET}
         - name: JAVA_OPTIONS
-          value: -Dswarm.project.stage.file=file:///deployments/config/clarksnut-stages.yml -Dswarm.project.stage=production -Dswarm.keycloak.json.path=/deployments/config/keycloak.json
+          value: -Dsso.auth.server.url=${SSO_AUTH_SERVER_URL} -Dsso.clientSecret=${SSO_AUTH_CLIENT_SECRET} -Dswarm.project.stage.file=file:///deployments/config/clarksnut-stages.yml -Dswarm.project.stage=production
         name: ${project.artifactId}
         image: ${project.artifactId}:latest
         imagePullPolicy: IfNotPresent

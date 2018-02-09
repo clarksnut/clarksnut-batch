@@ -1,5 +1,5 @@
-project:
-  stage: production
+logger:
+  level: DEBUG
 swarm:
   datasources:
     data-sources:
@@ -8,3 +8,19 @@ swarm:
         user-name: clarksnut
         password: clarksnut
         connection-url: jdbc:postgresql://clarksnut-mail-collector-db:5432/clarksnut
+clarksnut:
+  mail:
+    vendor:
+      gmail:
+        applicationName: "Clarksnut"
+  scheduler:
+    pull:
+      interval: 60
+    send:
+      size: 50
+---
+project:
+  stage: production
+clarksnut:
+  document:
+    apiUrl: "http://localhost:8080/api/documents"

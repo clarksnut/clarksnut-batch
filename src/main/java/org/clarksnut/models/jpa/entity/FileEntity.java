@@ -24,6 +24,10 @@ public class FileEntity implements CreatableEntity, UpdatableEntity, Serializabl
     @Column(name = "id", length = 36)
     private String id;
 
+    @NotNull
+    @Column(name = "filename")
+    private String filename;
+
     @Lob
     @Basic(fetch = FetchType.LAZY)
     @Column(name = "file")
@@ -95,5 +99,13 @@ public class FileEntity implements CreatableEntity, UpdatableEntity, Serializabl
 
     public void setVersion(int version) {
         this.version = version;
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
     }
 }
