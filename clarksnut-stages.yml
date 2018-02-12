@@ -15,11 +15,11 @@ clarksnut:
         applicationName: "Clarksnut"
   scheduler:
     pull:
-      interval: 3600
+      interval: 120
     send:
       size: 50
   document:
-      apiUrl: "http://localhost:8080/api/documents"
+      apiUrl: "http://clarksnut-clarksnut.apps.console.sistcoop.org/api/documents"
 ---
 project:
   stage: production
