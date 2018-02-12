@@ -10,5 +10,5 @@ items:
   data:
     cn.mail.vendor.gmail.applicationName: "Clarsknut"
     cn.scheduler.send.size: "50"
-    cn.scheduler.pull.internal: "600"
+    cn.scheduler.pull.internal: "3600"
     cn.document.apiUrl: "http://localhost:8080/api/documents"
