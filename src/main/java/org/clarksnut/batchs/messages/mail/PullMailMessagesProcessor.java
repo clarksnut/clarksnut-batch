@@ -2,7 +2,7 @@ package org.clarksnut.batchs.messages.mail;
 
 import org.clarksnut.mail.*;
 import org.clarksnut.models.jpa.entity.FileEntity;
-import org.clarksnut.models.jpa.entity.UserLinkedBrokerEntity;
+import org.clarksnut.models.jpa.entity.BrokerEntity;
 import org.clarksnut.models.utils.XmlValidator;
 
 import javax.batch.api.chunk.ItemProcessor;
@@ -19,10 +19,10 @@ public class PullMailMessagesProcessor implements ItemProcessor {
 
     @Override
     public Object processItem(Object item) throws Exception {
-        UserLinkedBrokerEntity entity = (UserLinkedBrokerEntity) item;
+        BrokerEntity entity = (BrokerEntity) item;
 
 
-        Map<UserLinkedBrokerEntity, List<FileEntity>> result = new HashMap<>();
+        Map<BrokerEntity, List<FileEntity>> result = new HashMap<>();
         result.put(entity, new ArrayList<>());
 
 

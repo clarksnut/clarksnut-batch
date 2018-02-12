@@ -3,7 +3,7 @@ package org.clarksnut.batchs.messages.broker;
 import org.clarksnut.managers.BrokerManager;
 import org.clarksnut.managers.BrokerModel;
 import org.clarksnut.models.jpa.entity.UserEntity;
-import org.clarksnut.models.jpa.entity.UserLinkedBrokerEntity;
+import org.clarksnut.models.jpa.entity.BrokerEntity;
 import org.clarksnut.models.utils.SetOps;
 import org.jboss.logging.Logger;
 
@@ -29,16 +29,16 @@ public class RefreshLinkedBrokersProcessor implements ItemProcessor {
         UserEntity userEntity = (UserEntity) item;
 
         Set<BrokerModel> availableLinkedBrokers = brokerManager.getLinkedBrokers(userEntity.getOfflineToken());
-        Map<BrokerModel, UserLinkedBrokerEntity> currentLinkedBrokers = new HashMap<>();
-        for (UserLinkedBrokerEntity e : userEntity.getLinkedBrokers()) {
+        Map<BrokerModel, BrokerEntity> currentLinkedBrokers = new HashMap<>();
+        for (BrokerEntity e : userEntity.getLinkedBrokers()) {
             currentLinkedBrokers.put(new BrokerModel(e.getType(), e.getEmail()), e);
         }
 
 
-        Set<UserLinkedBrokerEntity> linkedBrokersToAdd = SetOps.difference(availableLinkedBrokers, currentLinkedBrokers.keySet())
+        Set<BrokerEntity> linkedBrokersToAdd = SetOps.difference(availableLinkedBrokers, currentLinkedBrokers.keySet())
                 .stream()
                 .map(broker -> {
-                    UserLinkedBrokerEntity entity = new UserLinkedBrokerEntity();
+                    BrokerEntity entity = new BrokerEntity();
                     entity.setId(UUID.randomUUID().toString());
                     entity.setType(broker.getType());
                     entity.setEmail(broker.getEmail());
@@ -47,7 +47,7 @@ public class RefreshLinkedBrokersProcessor implements ItemProcessor {
                 })
                 .collect(Collectors.toSet());
 
-        Set<UserLinkedBrokerEntity> linkedBrokersToRemove = SetOps.difference(currentLinkedBrokers.keySet(), availableLinkedBrokers)
+        Set<BrokerEntity> linkedBrokersToRemove = SetOps.difference(currentLinkedBrokers.keySet(), availableLinkedBrokers)
                 .stream()
                 .map(currentLinkedBrokers::get)
                 .collect(Collectors.toSet());

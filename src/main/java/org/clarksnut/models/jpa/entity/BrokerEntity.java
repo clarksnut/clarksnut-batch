@@ -23,7 +23,7 @@ import java.util.Date;
         @NamedQuery(name = "getAllLinkedBrokers", query = "select b from UserLinkedBrokerEntity b inner join b.user u order by b.email"),
         @NamedQuery(name = "batch_getAllLinkedBrokers", query = "select b from UserLinkedBrokerEntity b inner join fetch b.user u order by b.createdAt")
 })
-public class UserLinkedBrokerEntity implements CreatableEntity, UpdatableEntity, Serializable {
+public class BrokerEntity implements CreatableEntity, UpdatableEntity, Serializable {
 
     @Id
     @Access(AccessType.PROPERTY)
@@ -47,6 +47,11 @@ public class UserLinkedBrokerEntity implements CreatableEntity, UpdatableEntity,
     @Type(type = "org.hibernate.type.LocalDateTimeType")
     @Column(name = "last_time_synchronized")
     private LocalDateTime lastTimeSynchronized;
+
+    @NotNull
+    @Type(type = "org.hibernate.type.YesNoType")
+    @Column(name = "enabled")
+    private boolean enabled;
 
     @NotNull
     @Temporal(TemporalType.TIMESTAMP)
@@ -126,5 +131,13 @@ public class UserLinkedBrokerEntity implements CreatableEntity, UpdatableEntity,
     @Override
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 }

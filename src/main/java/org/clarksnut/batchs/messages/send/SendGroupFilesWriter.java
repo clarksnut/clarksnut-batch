@@ -1,9 +1,7 @@
 package org.clarksnut.batchs.messages.send;
 
 import org.clarksnut.batchs.core.ResteasyItemWriter;
-import org.clarksnut.models.jpa.entity.FileEntity;
 import org.clarksnut.models.jpa.entity.GroupFileEntity;
-import org.clarksnut.models.jpa.entity.UserLinkedBrokerEntity;
 import org.clarksnut.services.KeycloakDeploymentConfig;
 import org.jberet.support._private.SupportMessages;
 import org.jboss.logging.Logger;

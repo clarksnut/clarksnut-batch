@@ -1,5 +1,6 @@
 package org.clarksnut.models.jpa.entity;
 
+import com.sun.xml.internal.ws.api.message.Message;
 import org.clarksnut.common.jpa.CreatableEntity;
 import org.clarksnut.common.jpa.CreatedAtListener;
 import org.clarksnut.common.jpa.UpdatableEntity;
@@ -24,17 +25,22 @@ public class FileEntity implements CreatableEntity, UpdatableEntity, Serializabl
     @Column(name = "id", length = 36)
     private String id;
 
-    @NotNull
-    @Column(name = "filename")
-    private String filename;
-
     @Lob
     @Basic(fetch = FetchType.LAZY)
     @Column(name = "file")
     private byte[] file;
 
+    @NotNull
+    @Column(name = "filename")
+    private String filename;
+
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", foreignKey = @ForeignKey)
+    @JoinColumn(name = "message_id", foreignKey = @ForeignKey)
+    private MessageEntity message;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "group_id", foreignKey = @ForeignKey)
     private GroupFileEntity group;
 
     @NotNull
@@ -59,12 +65,20 @@ public class FileEntity implements CreatableEntity, UpdatableEntity, Serializabl
         this.id = id;
     }
 
+    public byte[] getFile() {
+        return file;
+    }
+
     public void setFile(byte[] file) {
         this.file = file;
     }
 
-    public byte[] getFile() {
-        return file;
+    public MessageEntity getMessage() {
+        return message;
+    }
+
+    public void setMessage(MessageEntity message) {
+        this.message = message;
     }
 
     public GroupFileEntity getGroup() {

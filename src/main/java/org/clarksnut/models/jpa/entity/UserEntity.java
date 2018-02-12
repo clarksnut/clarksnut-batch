@@ -52,7 +52,7 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
     private String offlineToken;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private Set<UserLinkedBrokerEntity> linkedBrokers = new HashSet<>();
+    private Set<BrokerEntity> linkedBrokers = new HashSet<>();
 
     @NotNull
     @Temporal(TemporalType.TIMESTAMP)
@@ -108,11 +108,11 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
         this.offlineToken = offlineToken;
     }
 
-    public Set<UserLinkedBrokerEntity> getLinkedBrokers() {
+    public Set<BrokerEntity> getLinkedBrokers() {
         return linkedBrokers;
     }
 
-    public void setLinkedBrokers(Set<UserLinkedBrokerEntity> linkedBrokers) {
+    public void setLinkedBrokers(Set<BrokerEntity> linkedBrokers) {
         this.linkedBrokers = linkedBrokers;
     }
 

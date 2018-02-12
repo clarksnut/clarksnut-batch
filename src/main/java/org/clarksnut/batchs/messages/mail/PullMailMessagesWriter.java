@@ -1,7 +1,7 @@
 package org.clarksnut.batchs.messages.mail;
 
 import org.clarksnut.models.jpa.entity.FileEntity;
-import org.clarksnut.models.jpa.entity.UserLinkedBrokerEntity;
+import org.clarksnut.models.jpa.entity.BrokerEntity;
 import org.jberet.support.io.JpaItemWriter;
 
 import javax.inject.Named;
@@ -18,7 +18,7 @@ public class PullMailMessagesWriter extends JpaItemWriter {
         }
 
         for (final Object item : items) {
-            ((Map<UserLinkedBrokerEntity, List<FileEntity>>) item).forEach((key, value) -> {
+            ((Map<BrokerEntity, List<FileEntity>>) item).forEach((key, value) -> {
                 em.merge(key);
                 for (FileEntity e : value) {
                     em.persist(e);

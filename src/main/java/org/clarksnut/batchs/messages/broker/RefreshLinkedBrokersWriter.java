@@ -1,6 +1,6 @@
 package org.clarksnut.batchs.messages.broker;
 
-import org.clarksnut.models.jpa.entity.UserLinkedBrokerEntity;
+import org.clarksnut.models.jpa.entity.BrokerEntity;
 import org.jberet.support.io.JpaItemWriter;
 import org.jboss.logging.Logger;
 
@@ -19,10 +19,10 @@ public class RefreshLinkedBrokersWriter extends JpaItemWriter {
         }
         for (final Object e : items) {
             LinkedBrokersProcessed item = (LinkedBrokersProcessed) e;
-            for (UserLinkedBrokerEntity entity : item.getAdded()) {
+            for (BrokerEntity entity : item.getAdded()) {
                 em.persist(entity);
             }
-            for (UserLinkedBrokerEntity entity : item.getRemoved()) {
+            for (BrokerEntity entity : item.getRemoved()) {
                 em.remove(e);
             }
         }
