@@ -23,7 +23,7 @@ spec:
         - name: SSO_AUTH_CLIENT_SECRET
           value: ${SSO_AUTH_CLIENT_SECRET}
         - name: JAVA_OPTIONS
-          value: -Dsso.auth.server.url=${SSO_AUTH_SERVER_URL} -Dsso.clientSecret=${SSO_AUTH_CLIENT_SECRET} -Dswarm.project.stage.file=file:///deployments/config/clarksnut-stages.yml -Dswarm.project.stage=production
+          value: -Dsso.auth.server.url=${SSO_AUTH_SERVER_URL} -Dsso.clientSecret=${SSO_AUTH_CLIENT_SECRET} -Dswarm.project.stage.file=file:///deployments/config/clarksnut-stages.yml -Dswarm.project.stage=production-peru
         name: ${project.artifactId}
         image: ${project.artifactId}:latest
         imagePullPolicy: IfNotPresent
