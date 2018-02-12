@@ -20,7 +20,7 @@
             <chunk>
                 <reader ref="jpaItemReader">
                     <properties>
-                        <property name="namedQuery" value="batch_getAllLinkedBrokers"/>
+                        <property name="namedQuery" value="batch_getAllEnabledLinkedBrokers"/>
                         <property name="beanType" value="org.clarksnut.models.jpa.entity.BrokerEntity"/>
                     </properties>
                 </reader>

@@ -42,6 +42,7 @@ public class RefreshLinkedBrokersProcessor implements ItemProcessor {
                     entity.setId(UUID.randomUUID().toString());
                     entity.setType(broker.getType());
                     entity.setEmail(broker.getEmail());
+                    entity.setEnabled(true);
                     entity.setUser(userEntity);
                     return entity;
                 })
@@ -50,6 +51,7 @@ public class RefreshLinkedBrokersProcessor implements ItemProcessor {
         Set<BrokerEntity> linkedBrokersToRemove = SetOps.difference(currentLinkedBrokers.keySet(), availableLinkedBrokers)
                 .stream()
                 .map(currentLinkedBrokers::get)
+                .peek(c -> c.setEnabled(false))
                 .collect(Collectors.toSet());
 
 

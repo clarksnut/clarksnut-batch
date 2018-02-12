@@ -5,20 +5,16 @@ import org.clarksnut.common.jpa.UpdatedAtListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "cl_message", uniqueConstraints = {
-        @UniqueConstraint(columnNames = "message_id"),
-        @UniqueConstraint(columnNames = "provider")
-}, indexes = {
-        @Index(columnList = "message_id", unique = true),
-        @Index(columnList = "provider", unique = true)
+        @UniqueConstraint(columnNames = {"message_id", "broker_id"})
 })
-@EntityListeners({CreatedAtListener.class, UpdatedAtListener.class})
 @NamedQueries({
-        @NamedQuery(name = "getMessageByProviderAndMessageId", query = "select m from MessageEntity m where m.provider=:provider and m.messageId=:messageId")
+        @NamedQuery(name = "getMessageByMessageIdAndBrokerId", query = "select m from MessageEntity m inner join m.broker b where b.id=:brokerId and m.messageId=:messageId")
 })
 public class MessageEntity {
 
@@ -32,8 +28,9 @@ public class MessageEntity {
     private String messageId;
 
     @NotNull
-    @Column(name = "provider")
-    private String provider;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "internal_date")
+    private Date internalDate;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
@@ -59,20 +56,12 @@ public class MessageEntity {
         this.messageId = messageId;
     }
 
-    public String getProvider() {
-        return provider;
+    public Date getInternalDate() {
+        return internalDate;
     }
 
-    public void setProvider(String provider) {
-        this.provider = provider;
-    }
-
-    public Set<FileEntity> getFiles() {
-        return files;
-    }
-
-    public void setFiles(Set<FileEntity> files) {
-        this.files = files;
+    public void setInternalDate(Date internalDate) {
+        this.internalDate = internalDate;
     }
 
     public BrokerEntity getBroker() {
@@ -81,5 +70,13 @@ public class MessageEntity {
 
     public void setBroker(BrokerEntity broker) {
         this.broker = broker;
+    }
+
+    public Set<FileEntity> getFiles() {
+        return files;
+    }
+
+    public void setFiles(Set<FileEntity> files) {
+        this.files = files;
     }
 }

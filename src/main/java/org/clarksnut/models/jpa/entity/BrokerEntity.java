@@ -20,8 +20,8 @@ import java.util.Date;
 })
 @EntityListeners({CreatedAtListener.class, UpdatedAtListener.class})
 @NamedQueries({
-        @NamedQuery(name = "getAllLinkedBrokers", query = "select b from UserLinkedBrokerEntity b inner join b.user u order by b.email"),
-        @NamedQuery(name = "batch_getAllLinkedBrokers", query = "select b from UserLinkedBrokerEntity b inner join fetch b.user u order by b.createdAt")
+        @NamedQuery(name = "getAllLinkedBrokers", query = "select b from BrokerEntity b inner join b.user u order by b.email"),
+        @NamedQuery(name = "batch_getAllEnabledLinkedBrokers", query = "select b from BrokerEntity b inner join fetch b.user u where b.enabled = true order by b.createdAt")
 })
 public class BrokerEntity implements CreatableEntity, UpdatableEntity, Serializable {
 
@@ -44,9 +44,9 @@ public class BrokerEntity implements CreatableEntity, UpdatableEntity, Serializa
     @JoinColumn(name = "user_id", foreignKey = @ForeignKey)
     private UserEntity user;
 
-    @Type(type = "org.hibernate.type.LocalDateTimeType")
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "last_time_synchronized")
-    private LocalDateTime lastTimeSynchronized;
+    private Date lastTimeSynchronized;
 
     @NotNull
     @Type(type = "org.hibernate.type.YesNoType")
@@ -99,11 +99,11 @@ public class BrokerEntity implements CreatableEntity, UpdatableEntity, Serializa
         this.user = user;
     }
 
-    public LocalDateTime getLastTimeSynchronized() {
+    public Date getLastTimeSynchronized() {
         return lastTimeSynchronized;
     }
 
-    public void setLastTimeSynchronized(LocalDateTime lastTimeSynchronized) {
+    public void setLastTimeSynchronized(Date lastTimeSynchronized) {
         this.lastTimeSynchronized = lastTimeSynchronized;
     }
 

@@ -23,7 +23,7 @@ public class RefreshLinkedBrokersWriter extends JpaItemWriter {
                 em.persist(entity);
             }
             for (BrokerEntity entity : item.getRemoved()) {
-                em.remove(e);
+                em.merge(entity);
             }
         }
         if (entityTransaction) {

@@ -1,6 +1,5 @@
 package org.clarksnut.models.jpa;
 
-import org.clarksnut.models.FileAdapter;
 import org.clarksnut.models.FileModel;
 import org.clarksnut.models.MessageModel;
 import org.clarksnut.models.jpa.entity.MessageEntity;
@@ -23,11 +22,6 @@ public class MessageAdapter implements MessageModel {
     @Override
     public String getId() {
         return message.getId();
-    }
-
-    @Override
-    public String getProvider() {
-        return message.getProvider();
     }
 
     @Override

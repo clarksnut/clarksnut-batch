@@ -1,6 +1,5 @@
 package org.clarksnut.models.jpa.entity;
 
-import com.sun.xml.internal.ws.api.message.Message;
 import org.clarksnut.common.jpa.CreatableEntity;
 import org.clarksnut.common.jpa.CreatedAtListener;
 import org.clarksnut.common.jpa.UpdatableEntity;

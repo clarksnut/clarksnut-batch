@@ -27,9 +27,11 @@ public class SendGroupFilesProcessor implements ItemProcessor {
         groupFileEntity.setSended(true);
 
         ZipBuilder zipInMemory = ZipBuilder.createZipInMemory();
+
+        int counter = 0;
         for (FileEntity fileEntity : groupFileEntity.getFiles()) {
             zipInMemory.add(fileEntity.getFile())
-                    .path(fileEntity.getFilename())
+                    .path((++counter) + fileEntity.getFilename())
                     .save();
         }
         byte[] zipFile = zipInMemory.toBytes();

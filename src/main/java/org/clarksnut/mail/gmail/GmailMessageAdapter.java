@@ -5,6 +5,7 @@ import com.google.api.services.gmail.Gmail;
 import com.google.api.services.gmail.model.Message;
 import com.google.api.services.gmail.model.MessagePart;
 import com.google.api.services.gmail.model.MessagePartBody;
+import org.clarksnut.mail.MailAttachment;
 import org.clarksnut.mail.MailRepositoryModel;
 import org.clarksnut.mail.MailUblMessageModel;
 import org.clarksnut.mail.exceptions.MailReadException;
@@ -13,7 +14,7 @@ import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.List;
+import java.util.*;
 
 public class GmailMessageAdapter implements MailUblMessageModel {
 
@@ -28,7 +29,12 @@ public class GmailMessageAdapter implements MailUblMessageModel {
     }
 
     @Override
-    public byte[] getXml() throws MailReadException {
+    public String getMessageId() {
+        return message.getId();
+    }
+
+    @Override
+    public Set<MailAttachment> getXmlFiles() throws MailReadException {
         try {
             return getFileByExtension(".xml", ".XML");
         } catch (IOException e) {
@@ -37,14 +43,18 @@ public class GmailMessageAdapter implements MailUblMessageModel {
     }
 
     @Override
-    public LocalDateTime getReceiveDate() {
-        return Instant.ofEpochMilli(message.getInternalDate()).atZone(ZoneId.systemDefault()).toLocalDateTime();
+    public Date getReceiveDate() {
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(message.getInternalDate());
+        return cal.getTime();
     }
 
-    private byte[] getFileByExtension(String... validExtension) throws IOException {
+    private Set<MailAttachment> getFileByExtension(String... validExtension) throws IOException {
         if (validExtension == null || validExtension.length == 0) {
             throw new IllegalStateException("Invalid extension");
         }
+
+        Set<MailAttachment> result = new HashSet<>();
 
         List<MessagePart> parts = message.getPayload().getParts();
         for (MessagePart part : parts) {
@@ -67,11 +77,13 @@ public class GmailMessageAdapter implements MailUblMessageModel {
                             .execute();
 
                     Base64 base64url = new Base64(true);
-                    return base64url.decodeBase64(messagePartBody.getData());
+                    byte[] bytes = base64url.decodeBase64(messagePartBody.getData());
+
+                    result.add(new MailAttachment(bytes, part.getFilename()));
                 }
             }
         }
 
-        return null;
+        return result;
     }
 }

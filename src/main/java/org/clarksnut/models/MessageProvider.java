@@ -4,7 +4,7 @@ public interface MessageProvider {
 
     MessageModel getMessage(String id);
 
-    MessageModel addMessage(String messageId, String provider);
+    MessageModel addMessage(String messageId, BrokerModel broker);
 
-    MessageModel getUserByMessageIdAndProvider(String messageId, String provider);
+    MessageModel getUserByMessageIdAndBroker(String messageId, BrokerModel broker);
 }

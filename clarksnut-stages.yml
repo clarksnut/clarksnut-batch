@@ -18,9 +18,14 @@ clarksnut:
       interval: 3600
     send:
       size: 50
+  document:
+      apiUrl: "http://localhost:8080/api/documents"
 ---
 project:
   stage: production
+---
+project:
+  stage: production-peru
 clarksnut:
   document:
-    apiUrl: "http://localhost:8080/api/documents"
+    additionalTypesSupported: "Perception, Retention, VoidedDocuments, SummaryDocuments"

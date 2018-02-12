@@ -1,5 +1,6 @@
-package org.clarksnut.models;
+package org.clarksnut.models.jpa;
 
+import org.clarksnut.models.FileModel;
 import org.clarksnut.models.jpa.entity.FileEntity;
 
 import javax.persistence.EntityManager;
