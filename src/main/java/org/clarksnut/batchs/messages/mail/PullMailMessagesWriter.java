@@ -23,23 +23,25 @@ public class PullMailMessagesWriter extends JpaItemWriter {
         }
 
         for (final Object item : items) {
-            ((Map<BrokerEntity, List<MessageEntity>>) item).forEach((brokerEntity, messageEntities) -> {
-                em.merge(brokerEntity);
-                for (MessageEntity messageEntity : messageEntities) {
-                    TypedQuery<MessageEntity> query = em.createNamedQuery("getMessageByMessageIdAndBrokerId", MessageEntity.class);
-                    query.setParameter("brokerId", brokerEntity.getId());
-                    query.setParameter("messageId", messageEntity.getMessageId());
-                    List<MessageEntity> entities = query.getResultList();
-                    if (entities.isEmpty()) {
-                        em.persist(messageEntity);
+            if (item != null) {
+                ((Map<BrokerEntity, List<MessageEntity>>) item).forEach((brokerEntity, messageEntities) -> {
+                    em.merge(brokerEntity);
+                    for (MessageEntity messageEntity : messageEntities) {
+                        TypedQuery<MessageEntity> query = em.createNamedQuery("getMessageByMessageIdAndBrokerId", MessageEntity.class);
+                        query.setParameter("brokerId", brokerEntity.getId());
+                        query.setParameter("messageId", messageEntity.getMessageId());
+                        List<MessageEntity> entities = query.getResultList();
+                        if (entities.isEmpty()) {
+                            em.persist(messageEntity);
 
-                        for (FileEntity fileEntity : messageEntity.getFiles()) {
-                            fileEntity.setMessage(messageEntity);
-                            em.persist(fileEntity);
+                            for (FileEntity fileEntity : messageEntity.getFiles()) {
+                                fileEntity.setMessage(messageEntity);
+                                em.persist(fileEntity);
+                            }
                         }
                     }
-                }
-            });
+                });
+            }
         }
 
         if (entityTransaction) {

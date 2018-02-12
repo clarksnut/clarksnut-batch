@@ -1,10 +1,12 @@
 package org.clarksnut.batchs.messages.mail;
 
 import org.clarksnut.mail.*;
+import org.clarksnut.mail.exceptions.MailReadException;
 import org.clarksnut.models.jpa.entity.FileEntity;
 import org.clarksnut.models.jpa.entity.BrokerEntity;
 import org.clarksnut.models.jpa.entity.MessageEntity;
 import org.clarksnut.models.utils.XmlValidator;
+import org.jboss.logging.Logger;
 
 import javax.batch.api.chunk.ItemProcessor;
 import javax.inject.Inject;
@@ -15,6 +17,8 @@ import java.util.*;
 
 @Named
 public class PullMailMessagesProcessor implements ItemProcessor {
+
+    private static final Logger logger = Logger.getLogger(PullMailMessagesProcessor.class);
 
     @Inject
     private MailUtils mailUtils;
@@ -44,7 +48,15 @@ public class PullMailMessagesProcessor implements ItemProcessor {
                 queryBuilder.after(lastTimeSynchronized.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
             }
 
-            TreeSet<MailUblMessageModel> messages = mailProvider.getUblMessages(repository, queryBuilder.build());
+            TreeSet<MailUblMessageModel> messages;
+            try {
+                messages = mailProvider.getUblMessages(repository, queryBuilder.build());
+            } catch (MailReadException e) {
+                logger.error("Could not pull messages of " + brokerEntity.getEmail() + " user: " + brokerEntity.getUser().getId());
+                logger.error(e.getMessage());
+                return null;
+            }
+
             for (MailUblMessageModel message : messages) {
                 MessageEntity messageEntity = new MessageEntity();
                 messageEntity.setId(UUID.randomUUID().toString());
@@ -69,8 +81,10 @@ public class PullMailMessagesProcessor implements ItemProcessor {
             }
 
             // Update last sync
-            MailUblMessageModel lastMessage = messages.last();
-            brokerEntity.setLastTimeSynchronized(lastMessage.getReceiveDate());
+            if (!messages.isEmpty()) {
+                MailUblMessageModel lastMessage = messages.last();
+                brokerEntity.setLastTimeSynchronized(lastMessage.getReceiveDate());
+            }
         }
 
         return result;

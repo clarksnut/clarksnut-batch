@@ -1,5 +1,5 @@
-logger:
-  level: DEBUG
+project:
+  stage: production-peru
 swarm:
   datasources:
     data-sources:
@@ -15,17 +15,9 @@ clarksnut:
         applicationName: "Clarksnut"
   scheduler:
     pull:
-      interval: 120
+      interval: 3600
     send:
       size: 50
   document:
-      apiUrl: "http://clarksnut-clarksnut.apps.console.sistcoop.org/api/documents"
----
-project:
-  stage: production
----
-project:
-  stage: production-peru
-clarksnut:
-  document:
+    apiUrl: "http://localhost:8080/api/documents"
     additionalTypesSupported: "Perception, Retention, VoidedDocuments, SummaryDocuments"
