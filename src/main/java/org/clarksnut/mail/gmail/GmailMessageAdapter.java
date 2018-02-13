@@ -11,9 +11,6 @@ import org.clarksnut.mail.MailUblMessageModel;
 import org.clarksnut.mail.exceptions.MailReadException;
 
 import java.io.IOException;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.*;
 
 public class GmailMessageAdapter implements MailUblMessageModel {

@@ -3,7 +3,6 @@ package org.clarksnut.batchs;
 import org.wildfly.swarm.spi.runtime.annotations.ConfigurationValue;
 
 import javax.annotation.Resource;
-import javax.batch.operations.JobOperator;
 import javax.batch.runtime.BatchRuntime;
 import javax.enterprise.concurrent.ManagedScheduledExecutorService;
 import javax.enterprise.context.ApplicationScoped;

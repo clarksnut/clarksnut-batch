@@ -9,10 +9,10 @@ public class GmailQueryParser implements MailQueryParser {
     public String parse(MailQuery query) {
         GmailQuery.Builder builder = new GmailQuery.Builder();
         if (query.getAfter() != null) {
-            builder.after(query.getAfter().toLocalDate());
+            builder.after(query.getAfter());
         }
         if (query.getBefore() != null) {
-            builder.before(query.getBefore().toLocalDate());
+            builder.before(query.getBefore());
         }
         if (query.getHas() != null) {
             query.getHas().forEach(builder::has);

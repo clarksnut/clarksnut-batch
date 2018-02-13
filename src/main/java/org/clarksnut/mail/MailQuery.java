@@ -1,13 +1,13 @@
 package org.clarksnut.mail;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 public class MailQuery {
 
-    private final LocalDateTime after;
-    private final LocalDateTime before;
+    private final Date after;
+    private final Date before;
     private final Set<String> has;
     private final Set<String> fileType;
 
@@ -22,11 +22,11 @@ public class MailQuery {
         return new Builder();
     }
 
-    public LocalDateTime getAfter() {
+    public Date getAfter() {
         return after;
     }
 
-    public LocalDateTime getBefore() {
+    public Date getBefore() {
         return before;
     }
 
@@ -39,17 +39,17 @@ public class MailQuery {
     }
 
     public static class Builder {
-        private LocalDateTime after;
-        private LocalDateTime before;
+        private Date after;
+        private Date before;
         private Set<String> has = new HashSet<>();
         private Set<String> fileType = new HashSet<>();
 
-        public Builder after(LocalDateTime after) {
+        public Builder after(Date after) {
             this.after = after;
             return this;
         }
 
-        public Builder before(LocalDateTime before) {
+        public Builder before(Date before) {
             this.before = before;
             return this;
         }

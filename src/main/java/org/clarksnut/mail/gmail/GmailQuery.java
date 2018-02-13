@@ -1,7 +1,7 @@
 package org.clarksnut.mail.gmail;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class GmailQuery {
 
@@ -61,15 +61,15 @@ public class GmailQuery {
             return this;
         }
 
-        public Builder before(LocalDate before) {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-            this.before.append("before:").append(before.format(formatter));
+        public Builder before(Date before) {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
+            this.before.append("before:").append(formatter.format(before));
             return this;
         }
 
-        public Builder after(LocalDate after) {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-            this.after.append("after:").append(after.format(formatter));
+        public Builder after(Date after) {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
+            this.after.append("after:").append(formatter.format(after));
             return this;
         }
 

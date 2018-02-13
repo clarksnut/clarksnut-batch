@@ -2,8 +2,8 @@ package org.clarksnut.batchs.messages.broker;
 
 import org.clarksnut.managers.BrokerManager;
 import org.clarksnut.managers.BrokerModel;
-import org.clarksnut.models.jpa.entity.UserEntity;
 import org.clarksnut.models.jpa.entity.BrokerEntity;
+import org.clarksnut.models.jpa.entity.UserEntity;
 import org.clarksnut.models.utils.SetOps;
 import org.jboss.logging.Logger;
 

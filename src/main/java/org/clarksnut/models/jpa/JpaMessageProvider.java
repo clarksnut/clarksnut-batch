@@ -1,8 +1,9 @@
 package org.clarksnut.models.jpa;
 
-import org.clarksnut.models.*;
+import org.clarksnut.models.BrokerModel;
+import org.clarksnut.models.MessageModel;
+import org.clarksnut.models.MessageProvider;
 import org.clarksnut.models.jpa.entity.MessageEntity;
-import org.clarksnut.models.jpa.entity.UserEntity;
 
 import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;

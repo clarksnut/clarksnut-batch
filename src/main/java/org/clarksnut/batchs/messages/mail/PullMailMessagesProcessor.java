@@ -2,8 +2,8 @@ package org.clarksnut.batchs.messages.mail;
 
 import org.clarksnut.mail.*;
 import org.clarksnut.mail.exceptions.MailReadException;
-import org.clarksnut.models.jpa.entity.FileEntity;
 import org.clarksnut.models.jpa.entity.BrokerEntity;
+import org.clarksnut.models.jpa.entity.FileEntity;
 import org.clarksnut.models.jpa.entity.MessageEntity;
 import org.clarksnut.models.utils.XmlValidator;
 import org.jboss.logging.Logger;
@@ -11,8 +11,6 @@ import org.jboss.logging.Logger;
 import javax.batch.api.chunk.ItemProcessor;
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.*;
 
 @Named
@@ -45,7 +43,7 @@ public class PullMailMessagesProcessor implements ItemProcessor {
             MailQuery.Builder queryBuilder = MailQuery.builder().fileType("xml");
             Date lastTimeSynchronized = brokerEntity.getLastTimeSynchronized();
             if (lastTimeSynchronized != null) {
-                queryBuilder.after(lastTimeSynchronized.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
+                queryBuilder.after(lastTimeSynchronized);
             }
 
             TreeSet<MailUblMessageModel> messages;

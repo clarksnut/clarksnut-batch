@@ -1,14 +1,11 @@
 package org.clarksnut.batchs.messages.mail;
 
-import org.clarksnut.models.MessageProvider;
 import org.clarksnut.models.jpa.entity.BrokerEntity;
 import org.clarksnut.models.jpa.entity.FileEntity;
 import org.clarksnut.models.jpa.entity.MessageEntity;
 import org.jberet.support.io.JpaItemWriter;
 
-import javax.inject.Inject;
 import javax.inject.Named;
-import javax.mail.Message;
 import javax.persistence.TypedQuery;
 import java.util.List;
 import java.util.Map;

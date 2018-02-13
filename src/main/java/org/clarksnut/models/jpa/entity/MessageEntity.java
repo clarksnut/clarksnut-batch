@@ -1,8 +1,5 @@
 package org.clarksnut.models.jpa.entity;
 
-import org.clarksnut.common.jpa.CreatedAtListener;
-import org.clarksnut.common.jpa.UpdatedAtListener;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;

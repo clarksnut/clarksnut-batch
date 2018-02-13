@@ -1,13 +1,13 @@
 package org.clarksnut.models.jpa;
 
 import org.clarksnut.common.jpa.JpaModel;
-import org.clarksnut.models.*;
+import org.clarksnut.models.BrokerModel;
+import org.clarksnut.models.BrokerType;
+import org.clarksnut.models.UserModel;
 import org.clarksnut.models.jpa.entity.BrokerEntity;
 
 import javax.persistence.EntityManager;
 import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class BrokerAdapter implements BrokerModel, JpaModel<BrokerEntity> {
 
