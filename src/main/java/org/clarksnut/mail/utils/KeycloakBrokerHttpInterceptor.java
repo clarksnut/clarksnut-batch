@@ -8,6 +8,7 @@ import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.HttpUnsuccessfulResponseHandler;
 import com.google.api.client.util.Clock;
 import org.clarksnut.representations.idm.TokenRepresentation;
+import org.jboss.logging.Logger;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -19,6 +20,8 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class KeycloakBrokerHttpInterceptor implements HttpExecuteInterceptor, HttpUnsuccessfulResponseHandler {
+
+    private static final Logger logger = Logger.getLogger(KeycloakBrokerHttpInterceptor.class);
 
     private final String authServerUrl;
     private final String realm;
@@ -45,9 +48,10 @@ public class KeycloakBrokerHttpInterceptor implements HttpExecuteInterceptor, Ht
     @Override
     public void intercept(HttpRequest request) throws IOException {
         String oldAccessToken = credential.getAccessToken();
-        credential.intercept(request);
+        credential.intercept(request); // Refresh keycloak token
         String newAccessToken = credential.getAccessToken();
 
+        // Refresh google token
         lock.lock();
         try {
             Long keycloakExpiresIn = getKeycloakExpiresInSeconds();
@@ -55,6 +59,7 @@ public class KeycloakBrokerHttpInterceptor implements HttpExecuteInterceptor, Ht
                 refreshKeycloakToken();
                 if (keycloakAccessToken == null) {
                     // nothing we can do without an access token
+                    logger.error("Nothing we can do without an access Google token (null)");
                     return;
                 }
             }
@@ -74,6 +79,8 @@ public class KeycloakBrokerHttpInterceptor implements HttpExecuteInterceptor, Ht
                     return true;
                 }
             } catch (TokenResponseException e) {
+                logger.error("Error refreshing keycloak token status:" + e.getStatusCode() + " message:" + e.getMessage());
+
                 boolean statusCode4xx = 400 <= e.getStatusCode() && e.getStatusCode() < 500;
                 // check if it is a normal error response
                 if (e.getDetails() != null && statusCode4xx) {
