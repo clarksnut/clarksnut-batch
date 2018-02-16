@@ -5,8 +5,37 @@
          version="3.0">
     <security-constraint>
         <web-resource-collection>
-            <web-resource-name>Api resources</web-resource-name>
-            <url-pattern>/api/auth/authorize_offline_callback/*</url-pattern>
+            <web-resource-name>Broker Resources</web-resource-name>
+            <url-pattern>/api/auth/broker/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>user</role-name>
+        </auth-constraint>
+    </security-constraint>
+
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Offline Resources</web-resource-name>
+            <url-pattern>/api/auth/authorize_batch/login/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>user</role-name>
+        </auth-constraint>
+    </security-constraint>
+
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>User Resources</web-resource-name>
+            <url-pattern>/api/user/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>user</role-name>
+        </auth-constraint>
+    </security-constraint>
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Users Resources</web-resource-name>
+            <url-pattern>/api/users/*</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <role-name>user</role-name>

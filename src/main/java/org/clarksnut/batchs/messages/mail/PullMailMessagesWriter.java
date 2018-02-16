@@ -31,7 +31,7 @@ public class PullMailMessagesWriter extends JpaItemWriter {
                         if (entities.isEmpty()) {
                             em.persist(messageEntity);
 
-                            for (FileEntity fileEntity : messageEntity.getFiles()) {
+                            for (FileEntity fileEntity : messageEntity.getAttachments()) {
                                 fileEntity.setMessage(messageEntity);
                                 em.persist(fileEntity);
                             }

@@ -27,11 +27,11 @@ public class BatchScheduler {
 
     public void init() {
         // By default every 5 minutes
-        Integer interval = clarksnutSchedulerPullInterval.orElse(60);
+        Integer interval = clarksnutSchedulerPullInterval.orElse(120);
 
         // Default 5 seconds of delay
         scheduler.scheduleAtFixedRate(this::collectMessages, 5, interval, TimeUnit.SECONDS);
-        scheduler.scheduleAtFixedRate(this::sendMessages, 30, interval, TimeUnit.SECONDS);
+        scheduler.scheduleAtFixedRate(this::sendMessages, 60, interval, TimeUnit.SECONDS);
     }
 
     private void collectMessages() {

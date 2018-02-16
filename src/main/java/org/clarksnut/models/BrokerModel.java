@@ -10,9 +10,15 @@ public interface BrokerModel {
 
     String getEmail();
 
-    Date getLastTimeSynchronized();
+    String getToken();
+    void setToken(String token);
 
-    boolean isEnabled();
+    Date getLastTimeSynchronized();
+    void setLastTimeSynchronized(Date lastTimeSynchronized);
 
     UserModel getUser();
+    void setUser(UserModel user);
+
+    Date getCreatedAt();
+    Date getUpdatedAt();
 }

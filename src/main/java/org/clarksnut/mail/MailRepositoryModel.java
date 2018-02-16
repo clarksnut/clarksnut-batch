@@ -3,11 +3,13 @@ package org.clarksnut.mail;
 public class MailRepositoryModel {
 
     private final String email;
-    private final String refreshToken;
+    private final String userRefreshToken;
+    private final String brokerRefreshToken;
 
     private MailRepositoryModel(Builder builder) {
         this.email = builder.email;
-        this.refreshToken = builder.refreshToken;
+        this.userRefreshToken = builder.userRefreshToken;
+        this.brokerRefreshToken = builder.brokerRefreshToken;
     }
 
     public static Builder builder() {
@@ -18,21 +20,31 @@ public class MailRepositoryModel {
         return email;
     }
 
-    public String getRefreshToken() {
-        return refreshToken;
+    public String getUserRefreshToken() {
+        return userRefreshToken;
+    }
+
+    public String getBrokerRefreshToken() {
+        return brokerRefreshToken;
     }
 
     public static class Builder {
         private String email;
-        private String refreshToken;
+        private String userRefreshToken;
+        private String brokerRefreshToken;
 
         public Builder email(String email) {
             this.email = email;
             return this;
         }
 
-        public Builder refreshToken(String refreshToken) {
-            this.refreshToken = refreshToken;
+        public Builder userRefreshToken(String userRefreshToken) {
+            this.userRefreshToken = userRefreshToken;
+            return this;
+        }
+
+        public Builder brokerRefreshToken(String brokerRefreshToken) {
+            this.brokerRefreshToken = brokerRefreshToken;
             return this;
         }
 

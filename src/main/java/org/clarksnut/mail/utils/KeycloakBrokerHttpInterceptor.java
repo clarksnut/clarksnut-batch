@@ -15,6 +15,7 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.ClientRequestFilter;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -111,7 +112,8 @@ public class KeycloakBrokerHttpInterceptor implements HttpExecuteInterceptor, Ht
         Client client = ClientBuilder.newBuilder().register(authFilter).build();
         WebTarget target = client.target(getIdentityProviderTokenUrl(broker));
 
-        return target.request().get().readEntity(TokenRepresentation.class);
+        Response response = target.request().get();
+        return response.readEntity(TokenRepresentation.class);
     }
 
     private String getIdentityProviderTokenUrl(String broker) {

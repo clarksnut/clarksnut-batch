@@ -9,6 +9,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,11 +27,12 @@ public class JpaMessageProvider implements MessageProvider {
     }
 
     @Override
-    public MessageModel addMessage(String messageId, BrokerModel broker) {
+    public MessageModel addMessage(String messageId, Date internalDate, BrokerModel broker) {
         MessageEntity entity = new MessageEntity();
 
         entity.setId(UUID.randomUUID().toString());
         entity.setMessageId(messageId);
+        entity.setInternalDate(internalDate);
         entity.setBroker(BrokerAdapter.toEntity(broker, em));
 
         em.persist(entity);

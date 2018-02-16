@@ -1,12 +1,16 @@
 package org.clarksnut.models.jpa;
 
 import org.clarksnut.common.jpa.JpaModel;
+import org.clarksnut.models.BrokerModel;
 import org.clarksnut.models.UserModel;
 import org.clarksnut.models.jpa.entity.UserEntity;
 
 import javax.persistence.EntityManager;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
-public class UserAdapter implements UserModel, JpaModel<UserEntity>{
+public class UserAdapter implements UserModel, JpaModel<UserEntity> {
 
     private final EntityManager em;
     private final UserEntity user;
@@ -14,6 +18,13 @@ public class UserAdapter implements UserModel, JpaModel<UserEntity>{
     public UserAdapter(EntityManager em, UserEntity user) {
         this.em = em;
         this.user = user;
+    }
+
+    public static UserEntity toEntity(UserModel model, EntityManager em) {
+        if (model instanceof UserAdapter) {
+            return ((UserAdapter) model).getEntity();
+        }
+        return em.getReference(UserEntity.class, model.getId());
     }
 
     @Override
@@ -32,8 +43,13 @@ public class UserAdapter implements UserModel, JpaModel<UserEntity>{
     }
 
     @Override
-    public String getProviderType() {
-        return user.getProviderType();
+    public void setIdentityID(String identityID) {
+        user.setIdentityID(identityID);
+    }
+
+    @Override
+    public String getProvider() {
+        return user.getProvider();
     }
 
     @Override
@@ -42,12 +58,40 @@ public class UserAdapter implements UserModel, JpaModel<UserEntity>{
     }
 
     @Override
-    public String getOfflineToken() {
-        return user.getOfflineToken();
+    public String getToken() {
+        return user.getToken();
     }
 
     @Override
-    public void setOfflineToken(String offlineToken) {
-        user.setOfflineToken(offlineToken);
+    public void setToken(String token) {
+        user.setToken(token);
     }
+
+    @Override
+    public boolean isRegistrationComplete() {
+        return user.isRegistrationComplete();
+    }
+
+    @Override
+    public void setRegistrationComplete(boolean registrationComplete) {
+        user.setRegistrationComplete(registrationComplete);
+    }
+
+    @Override
+    public Date getCreatedAt() {
+        return user.getCreatedAt();
+    }
+
+    @Override
+    public Date getUpdatedAt() {
+        return user.getUpdatedAt();
+    }
+
+    @Override
+    public List<BrokerModel> getLinkedBrokers() {
+        return user.getLinkedBrokers().stream()
+                .map(f -> new BrokerAdapter(em, f))
+                .collect(Collectors.toList());
+    }
+
 }

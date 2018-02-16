@@ -4,6 +4,7 @@ import org.clarksnut.common.jpa.CreatableEntity;
 import org.clarksnut.common.jpa.CreatedAtListener;
 import org.clarksnut.common.jpa.UpdatableEntity;
 import org.clarksnut.common.jpa.UpdatedAtListener;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -14,19 +15,16 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "cl_user", uniqueConstraints = {
+@Table(name = "cn_user", uniqueConstraints = {
         @UniqueConstraint(columnNames = "username"),
         @UniqueConstraint(columnNames = "identity_id")
-}, indexes = {
-        @Index(columnList = "username", unique = true),
-        @Index(columnList = "identity_id", unique = true)
 })
 @EntityListeners({CreatedAtListener.class, UpdatedAtListener.class})
 @NamedQueries({
         @NamedQuery(name = "getAllUsers", query = "select u from UserEntity u order by u.username"),
         @NamedQuery(name = "getUserByUsername", query = "select u from UserEntity u where u.username = :username"),
         @NamedQuery(name = "getUserByIdentityID", query = "select u from UserEntity u where u.identityID = :identityID"),
-        @NamedQuery(name = "batch_getAllUsersWithOfflineToken", query = "select u from UserEntity u left join fetch u.linkedBrokers l where u.offlineToken is not null order by u.createdAt")
+        @NamedQuery(name = "batch_getAllUsersWithToken", query = "select u from UserEntity u left join fetch u.linkedBrokers l where u.token is not null order by u.createdAt")
 })
 public class UserEntity implements CreatableEntity, UpdatableEntity, Serializable {
 
@@ -40,19 +38,28 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
     private String identityID;
 
     @NotNull
-    @Column(name = "provider_type")
-    private String providerType;
+    @Column(name = "provider")
+    private String provider;
 
     @NotNull
     @Column(name = "username")
     private String username;
 
     @Size(max = 2048)
-    @Column(name = "offline_token", length = 2048)
-    private String offlineToken;
+    @Column(name = "token", length = 2048)
+    private String token;
+
+    @NotNull
+    @Type(type = "org.hibernate.type.TrueFalseType")
+    @Column(name = "registration_complete")
+    private boolean registrationComplete;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private Set<BrokerEntity> linkedBrokers = new HashSet<>();
+
+    /**
+     * Helper attributes
+     */
 
     @NotNull
     @Temporal(TemporalType.TIMESTAMP)
@@ -84,12 +91,12 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
         this.identityID = identityID;
     }
 
-    public String getProviderType() {
-        return providerType;
+    public String getProvider() {
+        return provider;
     }
 
-    public void setProviderType(String providerType) {
-        this.providerType = providerType;
+    public void setProvider(String provider) {
+        this.provider = provider;
     }
 
     public String getUsername() {
@@ -100,12 +107,20 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
         this.username = username;
     }
 
-    public String getOfflineToken() {
-        return offlineToken;
+    public String getToken() {
+        return token;
     }
 
-    public void setOfflineToken(String offlineToken) {
-        this.offlineToken = offlineToken;
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public boolean isRegistrationComplete() {
+        return registrationComplete;
+    }
+
+    public void setRegistrationComplete(boolean registrationCompleted) {
+        this.registrationComplete = registrationCompleted;
     }
 
     public Set<BrokerEntity> getLinkedBrokers() {
@@ -114,14 +129,6 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
 
     public void setLinkedBrokers(Set<BrokerEntity> linkedBrokers) {
         this.linkedBrokers = linkedBrokers;
-    }
-
-    public int getVersion() {
-        return version;
-    }
-
-    public void setVersion(int version) {
-        this.version = version;
     }
 
     public Date getCreatedAt() {
@@ -140,5 +147,13 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
     @Override
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
     }
 }

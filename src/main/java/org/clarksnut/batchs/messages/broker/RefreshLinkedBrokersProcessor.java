@@ -28,7 +28,7 @@ public class RefreshLinkedBrokersProcessor implements ItemProcessor {
     public LinkedBrokersProcessed processItem(Object item) throws Exception {
         UserEntity userEntity = (UserEntity) item;
 
-        Set<BrokerModel> availableLinkedBrokers = brokerManager.getLinkedBrokers(userEntity.getOfflineToken());
+        Set<BrokerModel> availableLinkedBrokers = brokerManager.getLinkedBrokers(userEntity.getToken());
         Map<BrokerModel, BrokerEntity> currentLinkedBrokers = new HashMap<>();
         for (BrokerEntity e : userEntity.getLinkedBrokers()) {
             currentLinkedBrokers.put(new BrokerModel(e.getType(), e.getEmail()), e);
@@ -42,7 +42,6 @@ public class RefreshLinkedBrokersProcessor implements ItemProcessor {
                     entity.setId(UUID.randomUUID().toString());
                     entity.setType(broker.getType());
                     entity.setEmail(broker.getEmail());
-                    entity.setEnabled(true);
                     entity.setUser(userEntity);
                     return entity;
                 })
@@ -51,11 +50,10 @@ public class RefreshLinkedBrokersProcessor implements ItemProcessor {
         Set<BrokerEntity> linkedBrokersToRemove = SetOps.difference(currentLinkedBrokers.keySet(), availableLinkedBrokers)
                 .stream()
                 .map(currentLinkedBrokers::get)
-                .peek(c -> c.setEnabled(false))
                 .collect(Collectors.toSet());
 
 
-        return new LinkedBrokersProcessed(linkedBrokersToAdd, linkedBrokersToRemove);
+        return new LinkedBrokersProcessed(userEntity, linkedBrokersToAdd, linkedBrokersToRemove);
     }
 
 }

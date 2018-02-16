@@ -1,13 +1,27 @@
 package org.clarksnut.models;
 
+import java.util.Date;
+import java.util.List;
+
 public interface UserModel {
 
     String getId();
+
     String getIdentityID();
-    String getProviderType();
+    void setIdentityID(String identityID);
+
+    String getProvider();
+
     String getUsername();
 
-    String getOfflineToken();
-    void setOfflineToken(String offlineToken);
+    String getToken();
+    void setToken(String token);
 
+    boolean isRegistrationComplete();
+    void setRegistrationComplete(boolean registrationComplete);
+
+    Date getCreatedAt();
+    Date getUpdatedAt();
+
+    List<BrokerModel> getLinkedBrokers();
 }

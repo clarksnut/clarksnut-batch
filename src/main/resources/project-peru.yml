@@ -12,9 +12,15 @@ clarksnut:
     vendor:
       gmail:
         applicationName: "Clarksnut"
+  broker:
+    vendor:
+      google:
+        clientId:
+        clientSecret:
+        redirectUris:
   scheduler:
     pull:
-      interval: 60
+      interval: 120
     send:
       size: 50
   document:

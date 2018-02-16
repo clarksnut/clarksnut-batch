@@ -5,6 +5,7 @@ import org.clarksnut.models.MessageModel;
 import org.clarksnut.models.jpa.entity.MessageEntity;
 
 import javax.persistence.EntityManager;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,8 +31,13 @@ public class MessageAdapter implements MessageModel {
     }
 
     @Override
+    public Date getInternalDate() {
+        return message.getInternalDate();
+    }
+
+    @Override
     public List<FileModel> getAttachments() {
-        return message.getFiles().stream()
+        return message.getAttachments().stream()
                 .map(f -> new FileAdapter(em, f))
                 .collect(Collectors.toList());
     }

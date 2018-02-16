@@ -23,7 +23,7 @@ public class JpaUserProvider implements UserProvider {
 
         entity.setId(UUID.randomUUID().toString());
         entity.setIdentityID(identityID);
-        entity.setProviderType(providerType);
+        entity.setProvider(providerType);
         entity.setUsername(username);
 
         em.persist(entity);

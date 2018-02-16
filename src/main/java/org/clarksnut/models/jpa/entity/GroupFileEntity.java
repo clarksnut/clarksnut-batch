@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "cl_group_file")
+@Table(name = "cn_group_file")
 @NamedQueries({
         @NamedQuery(name = "batch_getAllNotSentGroupFiles", query = "select g from GroupFileEntity g inner join fetch g.files f where g.sended = false")
 })

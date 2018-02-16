@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
-@Table(name = "cl_send_event")
+@Table(name = "cn_send_event")
 public class GroupFileSendEventEntity {
 
     @Id

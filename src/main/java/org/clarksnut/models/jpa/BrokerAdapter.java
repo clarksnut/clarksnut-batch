@@ -52,8 +52,8 @@ public class BrokerAdapter implements BrokerModel, JpaModel<BrokerEntity> {
     }
 
     @Override
-    public boolean isEnabled() {
-        return broker.isEnabled();
+    public void setLastTimeSynchronized(Date lastTimeSynchronized) {
+        broker.setLastTimeSynchronized(lastTimeSynchronized);
     }
 
     @Override
@@ -61,4 +61,28 @@ public class BrokerAdapter implements BrokerModel, JpaModel<BrokerEntity> {
         return new UserAdapter(em, broker.getUser());
     }
 
+    @Override
+    public void setUser(UserModel user) {
+        broker.setUser(UserAdapter.toEntity(user, em));
+    }
+
+    @Override
+    public Date getCreatedAt() {
+        return broker.getCreatedAt();
+    }
+
+    @Override
+    public Date getUpdatedAt() {
+        return broker.getUpdatedAt();
+    }
+
+    @Override
+    public String getToken() {
+        return broker.getToken();
+    }
+
+    @Override
+    public void setToken(String token) {
+        broker.setToken(token);
+    }
 }

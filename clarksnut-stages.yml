@@ -13,11 +13,17 @@ clarksnut:
     vendor:
       gmail:
         applicationName: "Clarksnut"
+  broker:
+    vendor:
+      google:
+        clientId:
+        clientSecret:
+        redirectUris:
   scheduler:
     pull:
-      interval: 3600
+      interval: 1800
     send:
-      size: 50
+      size: 100
   document:
     apiUrl: "http://localhost:8080/api/documents"
     additionalTypesSupported: "Perception, Retention, VoidedDocuments, SummaryDocuments"

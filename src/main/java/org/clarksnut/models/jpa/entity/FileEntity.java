@@ -11,7 +11,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-@Table(name = "cl_file")
+@Table(name = "cn_file")
 @EntityListeners({CreatedAtListener.class, UpdatedAtListener.class})
 @NamedQueries({
         @NamedQuery(name = "getAllNotGroupedFiles", query = "select f from FileEntity f where f.group is null"),

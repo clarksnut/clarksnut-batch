@@ -5,6 +5,7 @@ import org.clarksnut.mail.exceptions.MailReadException;
 import org.clarksnut.models.jpa.entity.BrokerEntity;
 import org.clarksnut.models.jpa.entity.FileEntity;
 import org.clarksnut.models.jpa.entity.MessageEntity;
+import org.clarksnut.models.jpa.entity.UserEntity;
 import org.clarksnut.models.utils.XmlValidator;
 import org.jboss.logging.Logger;
 
@@ -35,10 +36,18 @@ public class PullMailMessagesProcessor implements ItemProcessor {
 
         MailProvider mailProvider = mailUtils.getMailReader(brokerEntity.getType());
         if (mailProvider != null) {
+            String userToken = null;
+            UserEntity user = brokerEntity.getUser();
+            if (user != null) {
+                userToken = user.getToken();
+            }
+
             MailRepositoryModel repository = MailRepositoryModel.builder()
                     .email(brokerEntity.getEmail())
-                    .refreshToken(brokerEntity.getUser().getOfflineToken())
+                    .userRefreshToken(userToken)
+                    .brokerRefreshToken(brokerEntity.getToken())
                     .build();
+
 
             MailQuery.Builder queryBuilder = MailQuery.builder().fileType("xml");
             Date lastTimeSynchronized = brokerEntity.getLastTimeSynchronized();
@@ -71,7 +80,7 @@ public class PullMailMessagesProcessor implements ItemProcessor {
                         fileEntity.setFile(bytes);
                         fileEntity.setMessage(messageEntity);
 
-                        messageEntity.getFiles().add(fileEntity);
+                        messageEntity.getAttachments().add(fileEntity);
                     }
                 }
 

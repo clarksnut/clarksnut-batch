@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "cl_message", uniqueConstraints = {
+@Table(name = "cn_message", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"message_id", "broker_id"})
 })
 @NamedQueries({
@@ -35,7 +35,7 @@ public class MessageEntity {
     private BrokerEntity broker;
 
     @OneToMany(mappedBy = "message", fetch = FetchType.LAZY)
-    private Set<FileEntity> files = new HashSet<>();
+    private Set<FileEntity> attachments = new HashSet<>();
 
     public String getId() {
         return id;
@@ -69,11 +69,11 @@ public class MessageEntity {
         this.broker = broker;
     }
 
-    public Set<FileEntity> getFiles() {
-        return files;
+    public Set<FileEntity> getAttachments() {
+        return attachments;
     }
 
-    public void setFiles(Set<FileEntity> files) {
-        this.files = files;
+    public void setAttachments(Set<FileEntity> files) {
+        this.attachments = files;
     }
 }

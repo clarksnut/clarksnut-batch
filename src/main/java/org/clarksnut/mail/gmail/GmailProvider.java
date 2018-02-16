@@ -1,12 +1,17 @@
 package org.clarksnut.mail.gmail;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.api.client.auth.oauth2.BearerToken;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.batch.BatchRequest;
 import com.google.api.client.googleapis.batch.json.JsonBatchCallback;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.googleapis.json.GoogleJsonError;
+import com.google.api.client.http.BasicAuthentication;
+import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpHeaders;
 import com.google.api.client.http.HttpTransport;
+import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.gmail.Gmail;
@@ -20,6 +25,7 @@ import org.clarksnut.mail.utils.CredentialHandler;
 import org.clarksnut.managers.BrokerManager;
 import org.clarksnut.models.BrokerType;
 import org.jboss.logging.Logger;
+import org.keycloak.representations.AccessTokenResponse;
 import org.wildfly.swarm.spi.runtime.annotations.ConfigurationValue;
 
 import javax.annotation.PostConstruct;
@@ -39,6 +45,15 @@ public class GmailProvider implements MailProvider {
     @Inject
     @ConfigurationValue("clarksnut.mail.vendor.gmail.applicationName")
     private Optional<String> clarksnutGmailApplicationName;
+
+
+    @Inject
+    @ConfigurationValue("clarksnut.broker.vendor.google.clientId")
+    private Optional<String> clarksnutGoogleBrokerClientId;
+
+    @Inject
+    @ConfigurationValue("clarksnut.broker.vendor.google.clientSecret")
+    private Optional<String> clarksnutGoogleBrokerClientSecret;
 
     private HttpTransport HTTP_TRANSPORT;
     private JsonFactory JSON_FACTORY;
@@ -62,6 +77,11 @@ public class GmailProvider implements MailProvider {
 
         TreeSet<MailUblMessageModel> result = new TreeSet<>(Comparator.comparing(MailUblMessageModel::getReceiveDate));
 
+        if (gmail== null) {
+            logger.error("Could not build Credential from token");
+            return result;
+        }
+
         try {
             List<Message> messages = pullMessages(gmail, repository, query);
             for (List<Message> chunk : Lists.partition(messages, batchSize)) {
@@ -77,18 +97,37 @@ public class GmailProvider implements MailProvider {
     }
 
     private Gmail buildClient(MailRepositoryModel mailRepository) {
-        Credential credential = BrokerManager.getCredential()
-                .setRefreshToken(mailRepository.getRefreshToken());
+        Credential credential;
+        if (mailRepository.getBrokerRefreshToken() != null) {
+            ObjectMapper mapper = new ObjectMapper();
+            AccessTokenResponse token;
+            try {
+                token = mapper.readValue(mailRepository.getBrokerRefreshToken(), AccessTokenResponse.class);
+            } catch (IOException e) {
+                return null;
+            }
 
-        Enhancer enhancer = new Enhancer();
-        enhancer.setSuperclass(Credential.class);
-        enhancer.setCallback(new CredentialHandler("google", credential));
+            credential = new Credential.Builder(BearerToken.authorizationHeaderAccessMethod())
+                    .setTransport(new NetHttpTransport())
+                    .setJsonFactory(new JacksonFactory())
+                    .setTokenServerUrl(new GenericUrl("https://www.googleapis.com/oauth2/v4/token"))
+                    .setClientAuthentication(new BasicAuthentication(clarksnutGoogleBrokerClientId.get(), clarksnutGoogleBrokerClientSecret.get()))
+                    .build()
+                    .setRefreshToken(token.getRefreshToken());
+        } else {
+            credential = BrokerManager.getCredential().setRefreshToken(mailRepository.getUserRefreshToken());
 
-        Credential proxy = (Credential) enhancer.create(
-                new Class[]{Credential.AccessMethod.class},
-                new Credential.AccessMethod[]{credential.getMethod()});
+            Enhancer enhancer = new Enhancer();
+            enhancer.setSuperclass(Credential.class);
+            enhancer.setCallback(new CredentialHandler("google", credential));
 
-        return new Gmail.Builder(HTTP_TRANSPORT, JSON_FACTORY, proxy)
+            credential = (Credential) enhancer.create(
+                    new Class[]{Credential.AccessMethod.class},
+                    new Credential.AccessMethod[]{credential.getMethod()});
+        }
+
+
+        return new Gmail.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
                 .setApplicationName(applicationName)
                 .build();
     }
