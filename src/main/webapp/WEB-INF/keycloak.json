@@ -6,5 +6,6 @@
   "credentials": {
     "secret": "${sso.clientSecret}"
   },
+  "use-resource-role-mappings": true,
   "enable-cors": true
 }
