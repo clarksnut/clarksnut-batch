@@ -8,6 +8,7 @@ import org.clarksnut.representations.idm.UserAttributesRepresentation;
 import org.clarksnut.representations.idm.UserRepresentation;
 import org.clarksnut.services.resources.UsersService;
 
+import javax.ejb.Stateless;
 import javax.enterprise.context.RequestScoped;
 import javax.transaction.Transactional;
 import javax.ws.rs.core.UriInfo;
@@ -15,8 +16,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Transactional
-@RequestScoped
+@Stateless
 public class ModelToRepresentation {
 
     public UserRepresentation.Data toRepresentation(UserModel model, UriInfo uriInfo) {
@@ -43,9 +43,7 @@ public class ModelToRepresentation {
         attributes.setIdentityID(model.getIdentityID());
         attributes.setProviderType(model.getProvider());
         attributes.setUsername(model.getUsername());
-        attributes.setRegistrationCompleted(model.isRegistrationComplete());
         attributes.setCreatedAt(model.getCreatedAt());
-        attributes.setUpdatedAt(model.getUpdatedAt());
 
         // Brokers
         List<BrokerRepresentation.Data> brokers = model.getLinkedBrokers().stream()
@@ -70,7 +68,6 @@ public class ModelToRepresentation {
         attributes.setEmail(model.getEmail());
         attributes.setToken(model.getToken() != null ? "***" : null);
         attributes.setCreatedAt(model.getCreatedAt());
-        attributes.setUpdatedAt(model.getUpdatedAt());
 
         return rep;
     }

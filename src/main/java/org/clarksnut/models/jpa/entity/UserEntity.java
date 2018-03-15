@@ -1,11 +1,5 @@
 package org.clarksnut.models.jpa.entity;
 
-import org.clarksnut.common.jpa.CreatableEntity;
-import org.clarksnut.common.jpa.CreatedAtListener;
-import org.clarksnut.common.jpa.UpdatableEntity;
-import org.clarksnut.common.jpa.UpdatedAtListener;
-import org.hibernate.annotations.Type;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -19,14 +13,13 @@ import java.util.Set;
         @UniqueConstraint(columnNames = "username"),
         @UniqueConstraint(columnNames = "identity_id")
 })
-@EntityListeners({CreatedAtListener.class, UpdatedAtListener.class})
 @NamedQueries({
-        @NamedQuery(name = "getAllUsers", query = "select u from UserEntity u order by u.username"),
-        @NamedQuery(name = "getUserByUsername", query = "select u from UserEntity u where u.username = :username"),
-        @NamedQuery(name = "getUserByIdentityID", query = "select u from UserEntity u where u.identityID = :identityID"),
-        @NamedQuery(name = "batch_getAllUsersWithToken", query = "select u from UserEntity u left join fetch u.linkedBrokers l where u.token is not null order by u.createdAt")
+        @NamedQuery(name = "getUserByUsername", query = "select u from UserEntity u where u.username=:username"),
+        @NamedQuery(name = "getUserByIdentityID", query = "select u from UserEntity u where u.identityID=:identityID"),
+        @NamedQuery(name = "batch_getAllUsers", query = "select u from UserEntity u left join fetch u.brokers l order by u.createdAt"),
+        @NamedQuery(name = "batch_getAllUsersWithToken", query = "select u from UserEntity u left join fetch u.brokers l where u.token is not null order by u.createdAt")
 })
-public class UserEntity implements CreatableEntity, UpdatableEntity, Serializable {
+public class UserEntity implements Serializable {
 
     @Id
     @Access(AccessType.PROPERTY)
@@ -50,26 +43,12 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
     private String token;
 
     @NotNull
-    @Type(type = "org.hibernate.type.TrueFalseType")
-    @Column(name = "registration_complete")
-    private boolean registrationComplete;
-
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private Set<BrokerEntity> linkedBrokers = new HashSet<>();
-
-    /**
-     * Helper attributes
-     */
-
-    @NotNull
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at")
     private Date createdAt;
 
-    @NotNull
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "updated_at")
-    private Date updatedAt;
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private Set<BrokerEntity> brokers = new HashSet<>();
 
     @Version
     @Column(name = "version")
@@ -115,38 +94,20 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
         this.token = token;
     }
 
-    public boolean isRegistrationComplete() {
-        return registrationComplete;
-    }
-
-    public void setRegistrationComplete(boolean registrationCompleted) {
-        this.registrationComplete = registrationCompleted;
-    }
-
-    public Set<BrokerEntity> getLinkedBrokers() {
-        return linkedBrokers;
-    }
-
-    public void setLinkedBrokers(Set<BrokerEntity> linkedBrokers) {
-        this.linkedBrokers = linkedBrokers;
-    }
-
     public Date getCreatedAt() {
         return createdAt;
     }
 
-    @Override
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Date getUpdatedAt() {
-        return updatedAt;
+    public Set<BrokerEntity> getBrokers() {
+        return brokers;
     }
 
-    @Override
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setBrokers(Set<BrokerEntity> linkedBrokers) {
+        this.brokers = linkedBrokers;
     }
 
     public int getVersion() {
@@ -155,5 +116,30 @@ public class UserEntity implements CreatableEntity, UpdatableEntity, Serializabl
 
     public void setVersion(int version) {
         this.version = version;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof UserEntity)) {
+            return false;
+        }
+        UserEntity other = (UserEntity) obj;
+        if (id != null) {
+            if (!id.equals(other.id)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        return result;
     }
 }

@@ -18,10 +18,6 @@ public class MailQuery {
         this.fileType = builder.fileType;
     }
 
-    public static Builder builder() {
-        return new Builder();
-    }
-
     public Date getAfter() {
         return after;
     }

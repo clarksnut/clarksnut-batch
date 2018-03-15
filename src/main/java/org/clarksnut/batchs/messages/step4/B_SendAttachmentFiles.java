@@ -1,13 +1,16 @@
-package org.clarksnut.batchs.messages.send;
+package org.clarksnut.batchs.messages.step4;
 
+import org.clarksnut.batchs.BatchLogger;
 import org.clarksnut.batchs.core.ResteasyItemWriter;
-import org.clarksnut.models.jpa.entity.GroupFileEntity;
+import org.clarksnut.models.SendStatus;
+import org.clarksnut.models.jpa.entity.AttachmentEntity;
+import org.clarksnut.models.jpa.entity.SendStatusEntity;
 import org.clarksnut.services.KeycloakDeploymentConfig;
 import org.jberet.support._private.SupportMessages;
-import org.jboss.logging.Logger;
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
+import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataOutput;
 import org.keycloak.OAuth2Constants;
 import org.keycloak.adapters.KeycloakDeployment;
 import org.keycloak.admin.client.Config;
@@ -30,13 +33,12 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
 import java.io.Serializable;
+import java.util.AbstractMap;
 import java.util.List;
 import java.util.Map;
 
 @Named
-public class SendGroupFilesWriter extends ResteasyItemWriter {
-
-    private static final Logger logger = Logger.getLogger(SendGroupFilesWriter.class);
+public class B_SendAttachmentFiles extends ResteasyItemWriter {
 
     @Inject
     @BatchProperty
@@ -174,22 +176,40 @@ public class SendGroupFilesWriter extends ResteasyItemWriter {
         }
 
         for (Object item : items) {
-            ((Map<GroupFileEntity, GenericEntity>) item).forEach((key, value) -> {
-                Entity<Object> entity = Entity.entity(value, mediaTypeInstance);
-                final Response response;
-                if (HttpMethod.POST.equals(httpMethod)) {
-                    response = target.request().post(entity);
+            AbstractMap.SimpleEntry<AttachmentEntity, GenericEntity<MultipartFormDataOutput>> entry = (AbstractMap.SimpleEntry<AttachmentEntity, GenericEntity<MultipartFormDataOutput>>) item;
+            AttachmentEntity attachmentEntity = entry.getKey();
+            GenericEntity<MultipartFormDataOutput> genericEntity = entry.getValue();
+
+            Entity<Object> entity = Entity.entity(genericEntity, mediaTypeInstance);
+            final Response response;
+            if (HttpMethod.POST.equals(httpMethod)) {
+                response = target.request().post(entity);
+            } else {
+                response = target.request().put(entity);
+            }
+
+            final int status = response.getStatus();
+            final Response.Status.Family statusFamily = response.getStatusInfo().getFamily();
+
+            SendStatusEntity sendStatusEntity = attachmentEntity.getSendStatus();
+
+            if (statusFamily == Response.Status.Family.SUCCESSFUL) {
+                sendStatusEntity.setStatus(SendStatus.SENT_SUCCESSFULLY);
+            } else if (statusFamily == Response.Status.Family.CLIENT_ERROR) {
+                if (status == Response.Status.CONFLICT.getStatusCode()) {
+                    sendStatusEntity.setStatus(SendStatus.SENT_SUCCESSFULLY_BUT_ALREADY_IMPORTED);
                 } else {
-                    response = target.request().put(entity);
+                    sendStatusEntity.setStatus(SendStatus.SENT_SUCCESSFULLY_BUT_REJECTED);
                 }
-                final Response.Status.Family statusFamily = response.getStatusInfo().getFamily();
-                if (statusFamily == Response.Status.Family.SUCCESSFUL) {
-                    em.merge(key);
-                }
-                if (statusFamily == Response.Status.Family.CLIENT_ERROR || statusFamily == Response.Status.Family.SERVER_ERROR) {
-                    logger.error("Could not send file:" + response.getStatus() + " " + response.getStatusInfo().getReasonPhrase() + " " + response.getEntity());
-                }
-            });
+            } else if (statusFamily == Response.Status.Family.SERVER_ERROR) {
+                BatchLogger.LOGGER.couldNotSendFile(attachmentEntity.getFilename(), response.getStatus(), response.getStatusInfo().getReasonPhrase());
+            } else {
+                BatchLogger.LOGGER.couldNotSendFileAndNotKnowWhy(attachmentEntity.getFilename(), response.getStatus(), response.getStatusInfo().getReasonPhrase());
+            }
+
+            if (statusFamily == Response.Status.Family.SUCCESSFUL || statusFamily == Response.Status.Family.CLIENT_ERROR) {
+                em.merge(sendStatusEntity);
+            }
         }
 
         if (entityTransaction) {

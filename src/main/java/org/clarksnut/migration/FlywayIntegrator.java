@@ -16,11 +16,9 @@ import javax.sql.DataSource;
 
 public class FlywayIntegrator implements Integrator {
 
-    private static final Logger logger = Logger.getLogger(FlywayIntegrator.class);
-
     @Override
     public void integrate(Metadata metadata, SessionFactoryImplementor sessionFactory, SessionFactoryServiceRegistry serviceRegistry) {
-        logger.info("Starting Flyway Migration");
+        MigrationLogger.LOGGER.migrationStarting();
 
         Flyway flyway = new Flyway();
         String dataSourceJndi = getDatasourceNameJndi();
@@ -28,22 +26,25 @@ public class FlywayIntegrator implements Integrator {
             DataSource dataSource = (DataSource) new InitialContext().lookup(dataSourceJndi);
             flyway.setDataSource(dataSource);
         } catch (NamingException ex) {
-            logger.error("Error while looking up DataSource", ex);
-            // Do not proceed
-            return;
+            MigrationLogger.LOGGER.errorLookingUpDatasource(dataSourceJndi);
+            throw new IllegalStateException("Could not look up Datasource");
         }
 
         Dialect dialect = sessionFactory.getJdbcServices().getDialect();
         if (dialect instanceof H2Dialect) {
             flyway.setLocations("classpath:db/migration/h2");
+
+            MigrationLogger.LOGGER.detectedDialect("H2Dialect");
         } else if (dialect instanceof PostgreSQL9Dialect) {
             flyway.setLocations("classpath:db/migration/postgresql");
+
+            MigrationLogger.LOGGER.detectedDialect("PostgreSQL9Dialect");
         } else {
-            throw new IllegalStateException("Not supported Dialect");
+            throw new IllegalStateException("Dialect not supported");
         }
 
         flyway.migrate();
-        logger.info("Finished Flyway Migration");
+        MigrationLogger.LOGGER.migrationFinished();
     }
 
     @Override

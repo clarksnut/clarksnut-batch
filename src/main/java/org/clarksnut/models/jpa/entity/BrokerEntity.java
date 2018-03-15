@@ -1,29 +1,27 @@
 package org.clarksnut.models.jpa.entity;
 
-import org.clarksnut.common.jpa.CreatableEntity;
-import org.clarksnut.common.jpa.CreatedAtListener;
-import org.clarksnut.common.jpa.UpdatableEntity;
-import org.clarksnut.common.jpa.UpdatedAtListener;
 import org.clarksnut.models.BrokerType;
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@Table(name = "cn_linked_broker", uniqueConstraints = {
-        @UniqueConstraint(columnNames = "email")
-})
-@EntityListeners({CreatedAtListener.class, UpdatedAtListener.class})
+@Table(name = "cn_broker")
 @NamedQueries({
-        @NamedQuery(name = "getAllBrokers", query = "select b from BrokerEntity b"),
         @NamedQuery(name = "getAllBrokersByUserId", query = "select b from BrokerEntity b inner join b.user u where u.id =:userId"),
-        @NamedQuery(name = "batch_getAllBrokers", query = "select b from BrokerEntity b inner join fetch b.user u order by b.createdAt"),
-        @NamedQuery(name = "getBrokerByEmail", query = "select b from BrokerEntity b where b.email =:email")
+        @NamedQuery(name = "getBrokerByEmail", query = "select b from BrokerEntity b where b.email =:email"),
+        @NamedQuery(name = "batch_getAllEnableBrokers", query = "select b from BrokerEntity b where b.enable=true order by b.createdAt")
 })
-public class BrokerEntity implements CreatableEntity, UpdatableEntity, Serializable {
+public class BrokerEntity implements Serializable {
 
     @Id
     @Access(AccessType.PROPERTY)
@@ -31,39 +29,35 @@ public class BrokerEntity implements CreatableEntity, UpdatableEntity, Serializa
     private String id;
 
     @NotNull
+    @Column(name = "email")
+    private String email;
+
+    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "type")
     private BrokerType type;
 
     @NotNull
-    @Column(name = "email")
-    private String email;
-
     @Size(max = 2048)
-    @Column(name = "token", length = 2048)
-    private String token;
+    @Column(name = "refresh_token", length = 2048)
+    private String refreshToken;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "last_time_synchronized")
-    private Date lastTimeSynchronized;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", foreignKey = @ForeignKey)
-    private UserEntity user;
-
-    /**
-     * Helper attributes
-     */
+    @NotNull
+    @Type(type = "org.hibernate.type.NumericBooleanType")
+    @Column(name = "enable")
+    private boolean enable;
 
     @NotNull
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at")
     private Date createdAt;
 
-    @NotNull
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "updated_at")
-    private Date updatedAt;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", foreignKey = @ForeignKey)
+    private UserEntity user;
+
+    @OneToMany(mappedBy = "broker", fetch = FetchType.LAZY)
+    private Set<MessageEntity> messages = new HashSet<>();
 
     @Version
     @Column(name = "version")
@@ -77,14 +71,6 @@ public class BrokerEntity implements CreatableEntity, UpdatableEntity, Serializa
         this.id = id;
     }
 
-    public BrokerType getType() {
-        return type;
-    }
-
-    public void setType(BrokerType type) {
-        this.type = type;
-    }
-
     public String getEmail() {
         return email;
     }
@@ -93,20 +79,36 @@ public class BrokerEntity implements CreatableEntity, UpdatableEntity, Serializa
         this.email = email;
     }
 
-    public String getToken() {
-        return token;
+    public BrokerType getType() {
+        return type;
     }
 
-    public void setToken(String token) {
-        this.token = token;
+    public void setType(BrokerType type) {
+        this.type = type;
     }
 
-    public Date getLastTimeSynchronized() {
-        return lastTimeSynchronized;
+    public String getRefreshToken() {
+        return refreshToken;
     }
 
-    public void setLastTimeSynchronized(Date lastTimeSynchronized) {
-        this.lastTimeSynchronized = lastTimeSynchronized;
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public boolean isEnable() {
+        return enable;
+    }
+
+    public void setEnable(boolean enable) {
+        this.enable = enable;
     }
 
     public UserEntity getUser() {
@@ -117,22 +119,12 @@ public class BrokerEntity implements CreatableEntity, UpdatableEntity, Serializa
         this.user = user;
     }
 
-    public Date getCreatedAt() {
-        return createdAt;
+    public Set<MessageEntity> getMessages() {
+        return messages;
     }
 
-    @Override
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    @Override
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setMessages(Set<MessageEntity> messages) {
+        this.messages = messages;
     }
 
     public int getVersion() {
@@ -144,18 +136,29 @@ public class BrokerEntity implements CreatableEntity, UpdatableEntity, Serializa
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        BrokerEntity entity = (BrokerEntity) o;
-
-        return id.equals(entity.id);
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof BrokerEntity)) {
+            return false;
+        }
+        BrokerEntity other = (BrokerEntity) obj;
+        if (id != null) {
+            if (!id.equals(other.id)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
     public int hashCode() {
-        return id.hashCode();
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        return result;
     }
+
 }
 

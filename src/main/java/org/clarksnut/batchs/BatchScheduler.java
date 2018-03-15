@@ -31,19 +31,14 @@ public class BatchScheduler {
 
         // Default 5 seconds of delay
         scheduler.scheduleAtFixedRate(this::collectMessages, 5, interval, TimeUnit.SECONDS);
-        scheduler.scheduleAtFixedRate(this::sendMessages, 60, interval, TimeUnit.SECONDS);
     }
 
     private void collectMessages() {
-        BatchRuntime.getJobOperator().start("collect_messages", new Properties());
-    }
-
-    private void sendMessages() {
         String apiUrl = clarksnutDocumentApiUrl.orElse("http://localhost:8080/api/documents");
         Properties properties = new Properties();
         properties.put("clarksnutDocumentApiUrl", apiUrl);
 
-        BatchRuntime.getJobOperator().start("send_messages", properties);
+        BatchRuntime.getJobOperator().start("collect_messages", properties);
     }
 
 }

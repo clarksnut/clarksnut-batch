@@ -17,11 +17,7 @@ public interface UserModel {
     String getToken();
     void setToken(String token);
 
-    boolean isRegistrationComplete();
-    void setRegistrationComplete(boolean registrationComplete);
-
     Date getCreatedAt();
-    Date getUpdatedAt();
 
     List<BrokerModel> getLinkedBrokers();
 }

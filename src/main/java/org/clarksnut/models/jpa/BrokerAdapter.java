@@ -5,17 +5,18 @@ import org.clarksnut.models.BrokerModel;
 import org.clarksnut.models.BrokerType;
 import org.clarksnut.models.UserModel;
 import org.clarksnut.models.jpa.entity.BrokerEntity;
+import org.hibernate.Session;
 
 import javax.persistence.EntityManager;
 import java.util.Date;
 
 public class BrokerAdapter implements BrokerModel, JpaModel<BrokerEntity> {
 
-    private final EntityManager em;
+    private final Session session;
     private final BrokerEntity broker;
 
-    public BrokerAdapter(EntityManager em, BrokerEntity broker) {
-        this.em = em;
+    public BrokerAdapter(Session session, BrokerEntity broker) {
+        this.session = session;
         this.broker = broker;
     }
 
@@ -47,23 +48,13 @@ public class BrokerAdapter implements BrokerModel, JpaModel<BrokerEntity> {
     }
 
     @Override
-    public Date getLastTimeSynchronized() {
-        return broker.getLastTimeSynchronized();
-    }
-
-    @Override
-    public void setLastTimeSynchronized(Date lastTimeSynchronized) {
-        broker.setLastTimeSynchronized(lastTimeSynchronized);
-    }
-
-    @Override
     public UserModel getUser() {
-        return new UserAdapter(em, broker.getUser());
+        return new UserAdapter(session, broker.getUser());
     }
 
     @Override
     public void setUser(UserModel user) {
-        broker.setUser(UserAdapter.toEntity(user, em));
+        broker.setUser(UserAdapter.toEntity(user, session));
     }
 
     @Override
@@ -72,17 +63,13 @@ public class BrokerAdapter implements BrokerModel, JpaModel<BrokerEntity> {
     }
 
     @Override
-    public Date getUpdatedAt() {
-        return broker.getUpdatedAt();
-    }
-
-    @Override
     public String getToken() {
-        return broker.getToken();
+        return broker.getRefreshToken();
     }
 
     @Override
     public void setToken(String token) {
-        broker.setToken(token);
+        broker.setRefreshToken(token);
     }
+
 }

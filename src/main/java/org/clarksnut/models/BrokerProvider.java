@@ -11,4 +11,5 @@ public interface BrokerProvider {
     BrokerModel getBrokerByEmail(String email);
 
     List<BrokerModel> getBrokers(UserModel user);
+
 }

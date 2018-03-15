@@ -6,6 +6,7 @@ import org.w3c.dom.Element;
 import org.wildfly.swarm.spi.runtime.annotations.ConfigurationValue;
 
 import javax.annotation.PostConstruct;
+import javax.ejb.Singleton;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.xml.parsers.DocumentBuilder;
@@ -15,14 +16,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-@ApplicationScoped
+@Singleton
 public class XmlValidator {
+
+    private List<String> additionalTypes;
 
     @Inject
     @ConfigurationValue("clarksnut.document.additionalTypesSupported")
     private Optional<String> additionalTypesSupported;
-
-    private List<String> additionalTypes;
 
     @PostConstruct
     private void init() {
@@ -30,7 +31,7 @@ public class XmlValidator {
         additionalTypes = Arrays.asList(split);
     }
 
-    public boolean isValidUblFile(byte[] bytes) {
+    public boolean isUBLFile(byte[] bytes) {
         try {
             Document document = toDocument(bytes);
             String documentType = getDocumentType(document);

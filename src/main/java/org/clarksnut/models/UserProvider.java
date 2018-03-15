@@ -1,5 +1,7 @@
 package org.clarksnut.models;
 
+import java.util.List;
+
 public interface UserProvider {
 
     /**

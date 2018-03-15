@@ -1,4 +1,6 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>io.openshift</groupId>
@@ -20,6 +22,9 @@
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <version.wildfly.swarm>2018.3.3</version.wildfly.swarm>
         <version.arquillian.cube>1.9.2</version.arquillian.cube>
+
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
 
         <!--Hibernate-->
         <version.hibernate>5.2.12.Final</version.hibernate>
@@ -104,6 +109,10 @@
         </dependency>
         <dependency>
             <groupId>org.wildfly.swarm</groupId>
+            <artifactId>ejb</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wildfly.swarm</groupId>
             <artifactId>arquillian</artifactId>
             <scope>test</scope>
         </dependency>
@@ -125,6 +134,22 @@
                     <artifactId>undertow-core</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+
+        <!--Logging-->
+        <dependency>
+            <groupId>org.jboss.logging</groupId>
+            <artifactId>jboss-logging-annotations</artifactId>
+            <version>2.1.0.Final</version>
+            <scope>provided</scope>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.logging</groupId>
+            <artifactId>jboss-logging-processor</artifactId>
+            <version>2.1.0.Final</version>
+            <scope>provided</scope>
+            <optional>true</optional>
         </dependency>
 
         <!--Hibernate-->
@@ -253,8 +278,10 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
                     <classpathDependencyExcludes>
-                        <classpathDependencyExclude>org.arquillian.cube:arquillian-cube-openshift</classpathDependencyExclude>
-                        <classpathDependencyExclude>org.arquillian.cube:arquillian-cube-kubernetes</classpathDependencyExclude>
+                        <classpathDependencyExclude>org.arquillian.cube:arquillian-cube-openshift
+                        </classpathDependencyExclude>
+                        <classpathDependencyExclude>org.arquillian.cube:arquillian-cube-kubernetes
+                        </classpathDependencyExclude>
                     </classpathDependencyExcludes>
                 </configuration>
             </plugin>
@@ -279,6 +306,15 @@
                 </configuration>
             </plugin>
 
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.7.0</version>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
@@ -388,7 +424,8 @@
                         <version>0.9.11</version>
                         <extensions>true</extensions> <!-- required to run automatically -->
                         <configuration>
-                            <outputPath>${project.build.directory}/generated-sources/postgresql/database.sql</outputPath>
+                            <outputPath>${project.build.directory}/generated-sources/postgresql/database.sql
+                            </outputPath>
                             <packages>
                                 <package>org.clarksnut</package>
                             </packages>

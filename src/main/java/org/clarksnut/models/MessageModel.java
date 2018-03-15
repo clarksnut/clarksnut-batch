@@ -7,8 +7,5 @@ public interface MessageModel {
 
     String getId();
     String getMessageId();
-
-    Date getInternalDate();
-
-    List<FileModel> getAttachments();
+    Date getMessageDate();
 }

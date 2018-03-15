@@ -11,6 +11,7 @@ import org.keycloak.KeycloakPrincipal;
 import org.keycloak.KeycloakSecurityContext;
 import org.keycloak.representations.AccessToken;
 
+import javax.ejb.Stateless;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -20,8 +21,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
-@Transactional
-@RequestScoped
+@Stateless
 @Path("/users")
 @Consumes(MediaType.APPLICATION_JSON)
 public class UsersService {
@@ -65,21 +65,21 @@ public class UsersService {
         return modelToRepresentation.toRepresentation(user, uriInfo).toUserRepresentation();
     }
 
-    @PATCH
-    @Produces(MediaType.APPLICATION_JSON)
-    public UserRepresentation currentUser(@Context final HttpServletRequest httpServletRequest, final UserRepresentation userRepresentation) {
-        UserModel user = getUser(httpServletRequest);
-        UserAttributesRepresentation userAttributesRepresentation = userRepresentation.getData().getAttributes();
-
-        if (userAttributesRepresentation != null) {
-            // Is registration completed
-            Boolean registrationCompleted = userAttributesRepresentation.getRegistrationCompleted();
-            if (registrationCompleted != null) {
-                user.setRegistrationComplete(registrationCompleted);
-            }
-        }
-
-        return modelToRepresentation.toRepresentation(user, uriInfo).toUserRepresentation();
-    }
+//    @PATCH
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public UserRepresentation currentUser(@Context final HttpServletRequest httpServletRequest, final UserRepresentation userRepresentation) {
+//        UserModel user = getUser(httpServletRequest);
+//        UserAttributesRepresentation userAttributesRepresentation = userRepresentation.getData().getAttributes();
+//
+//        if (userAttributesRepresentation != null) {
+//            // Is registration completed
+//            Boolean registrationCompleted = userAttributesRepresentation.getRegistrationCompleted();
+//            if (registrationCompleted != null) {
+//                user.setRegistrationComplete(registrationCompleted);
+//            }
+//        }
+//
+//        return modelToRepresentation.toRepresentation(user, uriInfo).toUserRepresentation();
+//    }
 
 }

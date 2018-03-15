@@ -22,9 +22,6 @@ public class UserAttributesRepresentation {
     // The username
     private String username;
 
-    // Whether the registration has been completed
-    private Boolean registrationCompleted;
-
     // The IDP provided this identity
     private String providerType;
 
@@ -68,14 +65,6 @@ public class UserAttributesRepresentation {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public Boolean getRegistrationCompleted() {
-        return registrationCompleted;
-    }
-
-    public void setRegistrationCompleted(Boolean registrationCompleted) {
-        this.registrationCompleted = registrationCompleted;
     }
 
     public String getProviderType() {

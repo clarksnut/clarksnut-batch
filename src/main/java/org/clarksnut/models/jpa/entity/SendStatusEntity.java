@@ -1,12 +1,14 @@
 package org.clarksnut.models.jpa.entity;
 
+import org.clarksnut.models.SendStatus;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "cn_file")
-public class FileEntity implements Serializable {
+@Table(name = "cn_send_status")
+public class SendStatusEntity implements Serializable {
 
     @Id
     @Access(AccessType.PROPERTY)
@@ -14,14 +16,18 @@ public class FileEntity implements Serializable {
     private String id;
 
     @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private SendStatus status;
+
+    @NotNull
     @MapsId
     @OneToOne(fetch = FetchType.LAZY)
     private AttachmentEntity attachment;
 
-    @Lob
-    @Basic(fetch = FetchType.LAZY)
-    @Column(name = "file")
-    private byte[] file;
+    @Version
+    @Column(name = "version")
+    private int version;
 
     public String getId() {
         return id;
@@ -29,6 +35,14 @@ public class FileEntity implements Serializable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public SendStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(SendStatus status) {
+        this.status = status;
     }
 
     public AttachmentEntity getAttachment() {
@@ -39,12 +53,12 @@ public class FileEntity implements Serializable {
         this.attachment = attachment;
     }
 
-    public byte[] getFile() {
-        return file;
+    public int getVersion() {
+        return version;
     }
 
-    public void setFile(byte[] file) {
-        this.file = file;
+    public void setVersion(int version) {
+        this.version = version;
     }
 
     @Override
@@ -52,10 +66,10 @@ public class FileEntity implements Serializable {
         if (this == obj) {
             return true;
         }
-        if (!(obj instanceof FileEntity)) {
+        if (!(obj instanceof SendStatusEntity)) {
             return false;
         }
-        FileEntity other = (FileEntity) obj;
+        SendStatusEntity other = (SendStatusEntity) obj;
         if (id != null) {
             if (!id.equals(other.id)) {
                 return false;
@@ -71,5 +85,4 @@ public class FileEntity implements Serializable {
         result = prime * result + ((id == null) ? 0 : id.hashCode());
         return result;
     }
-
 }

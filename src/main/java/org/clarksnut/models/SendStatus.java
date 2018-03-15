@@ -1,0 +1,10 @@
+package org.clarksnut.models;
+
+public enum SendStatus {
+
+    WAITING_FOR_SEND,
+    SENT_SUCCESSFULLY,
+    SENT_SUCCESSFULLY_BUT_ALREADY_IMPORTED,
+    SENT_SUCCESSFULLY_BUT_REJECTED;
+
+}
