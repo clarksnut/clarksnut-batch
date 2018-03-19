@@ -5,18 +5,17 @@ import org.clarksnut.models.BrokerModel;
 import org.clarksnut.models.BrokerType;
 import org.clarksnut.models.UserModel;
 import org.clarksnut.models.jpa.entity.BrokerEntity;
-import org.hibernate.Session;
 
 import javax.persistence.EntityManager;
 import java.util.Date;
 
 public class BrokerAdapter implements BrokerModel, JpaModel<BrokerEntity> {
 
-    private final Session session;
+    private final EntityManager em;
     private final BrokerEntity broker;
 
-    public BrokerAdapter(Session session, BrokerEntity broker) {
-        this.session = session;
+    public BrokerAdapter(EntityManager em, BrokerEntity broker) {
+        this.em = em;
         this.broker = broker;
     }
 
@@ -49,12 +48,12 @@ public class BrokerAdapter implements BrokerModel, JpaModel<BrokerEntity> {
 
     @Override
     public UserModel getUser() {
-        return new UserAdapter(session, broker.getUser());
+        return new UserAdapter(em, broker.getUser());
     }
 
     @Override
     public void setUser(UserModel user) {
-        broker.setUser(UserAdapter.toEntity(user, session));
+        broker.setUser(UserAdapter.toEntity(user, em));
     }
 
     @Override

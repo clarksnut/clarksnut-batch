@@ -2,9 +2,7 @@ package org.clarksnut.services.resources;
 
 import org.clarksnut.models.UserModel;
 import org.clarksnut.models.UserProvider;
-import org.clarksnut.representations.idm.UserAttributesRepresentation;
 import org.clarksnut.representations.idm.UserRepresentation;
-import org.clarksnut.services.resources.utils.PATCH;
 import org.clarksnut.utils.ModelToRepresentation;
 import org.jboss.logging.Logger;
 import org.keycloak.KeycloakPrincipal;
@@ -12,10 +10,8 @@ import org.keycloak.KeycloakSecurityContext;
 import org.keycloak.representations.AccessToken;
 
 import javax.ejb.Stateless;
-import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
-import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;

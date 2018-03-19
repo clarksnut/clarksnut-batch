@@ -8,7 +8,6 @@ import org.clarksnut.models.jpa.entity.AttachmentEntity;
 import org.clarksnut.models.jpa.entity.BrokerEntity;
 import org.clarksnut.models.jpa.entity.MessageEntity;
 import org.clarksnut.models.jpa.entity.SendStatusEntity;
-import org.hibernate.Session;
 import org.jberet.support.io.JpaItemReaderWriterBase;
 
 import javax.batch.api.chunk.ItemProcessor;
@@ -77,9 +76,7 @@ public class B_ValidateMails extends JpaItemReaderWriterBase implements ItemProc
     }
 
     protected Optional<MessageEntity> getMessage(BrokerEntity broker, String messageId) {
-        Session session = em.unwrap(Session.class);
-
-        TypedQuery<MessageEntity> query = session.createNamedQuery("getMessageByMessageIdAndBrokerId", MessageEntity.class);
+        TypedQuery<MessageEntity> query = em.createNamedQuery("getMessageByMessageIdAndBrokerId", MessageEntity.class);
         query.setParameter("messageId", messageId);
         query.setParameter("brokerId", broker.getId());
         List<MessageEntity> entities = query.getResultList();

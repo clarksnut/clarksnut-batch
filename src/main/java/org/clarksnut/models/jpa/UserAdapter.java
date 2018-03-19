@@ -4,7 +4,6 @@ import org.clarksnut.common.jpa.JpaModel;
 import org.clarksnut.models.BrokerModel;
 import org.clarksnut.models.UserModel;
 import org.clarksnut.models.jpa.entity.UserEntity;
-import org.hibernate.Session;
 
 import javax.persistence.EntityManager;
 import java.util.Date;
@@ -13,11 +12,11 @@ import java.util.stream.Collectors;
 
 public class UserAdapter implements UserModel, JpaModel<UserEntity> {
 
-    private final Session session;
+    private final EntityManager em;
     private final UserEntity user;
 
-    public UserAdapter(Session session, UserEntity user) {
-        this.session = session;
+    public UserAdapter(EntityManager em, UserEntity user) {
+        this.em = em;
         this.user = user;
     }
 
@@ -76,7 +75,7 @@ public class UserAdapter implements UserModel, JpaModel<UserEntity> {
     @Override
     public List<BrokerModel> getLinkedBrokers() {
         return user.getBrokers().stream()
-                .map(f -> new BrokerAdapter(session, f))
+                .map(f -> new BrokerAdapter(em, f))
                 .collect(Collectors.toList());
     }
 

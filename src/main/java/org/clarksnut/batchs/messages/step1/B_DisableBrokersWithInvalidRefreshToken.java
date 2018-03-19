@@ -1,7 +1,6 @@
 package org.clarksnut.batchs.messages.step1;
 
 import org.clarksnut.models.jpa.entity.BrokerEntity;
-import org.hibernate.Session;
 import org.jberet.support.io.JpaItemWriter;
 
 import javax.inject.Named;
@@ -16,11 +15,9 @@ public class B_DisableBrokersWithInvalidRefreshToken extends JpaItemWriter {
             em.getTransaction().begin();
         }
 
-        Session session = em.unwrap(Session.class);
-
         for (final Object e : items) {
             BrokerEntity brokerEntity = (BrokerEntity) e;
-            session.merge(brokerEntity);
+            em.merge(brokerEntity);
         }
 
         if (entityTransaction) {

@@ -9,8 +9,6 @@ import org.clarksnut.representations.idm.UserRepresentation;
 import org.clarksnut.services.resources.UsersService;
 
 import javax.ejb.Stateless;
-import javax.enterprise.context.RequestScoped;
-import javax.transaction.Transactional;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.util.List;

@@ -1,17 +1,13 @@
 package org.clarksnut.models.jpa;
 
-import org.clarksnut.models.*;
+import org.clarksnut.models.FileModel;
+import org.clarksnut.models.FileProvider;
+import org.clarksnut.models.MessageModel;
 import org.clarksnut.models.jpa.entity.FileEntity;
-import org.clarksnut.models.jpa.entity.UserEntity;
-import org.hibernate.Session;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
-import java.util.Calendar;
-import java.util.List;
-import java.util.UUID;
 
 @Stateless
 public class JpaFileProvider extends AbstractHibernateProvider implements FileProvider {
@@ -31,10 +27,10 @@ public class JpaFileProvider extends AbstractHibernateProvider implements FilePr
 
     @Override
     public FileModel getFile(String id) {
-        Session session = getSession();
 
-        FileEntity entity = session.find(FileEntity.class, id);
+
+        FileEntity entity = em.find(FileEntity.class, id);
         if (entity == null) return null;
-        return new FileAdapter(session, entity);
+        return new FileAdapter(em, entity);
     }
 }

@@ -8,7 +8,6 @@ import org.hibernate.dialect.PostgreSQL9Dialect;
 import org.hibernate.engine.spi.SessionFactoryImplementor;
 import org.hibernate.integrator.spi.Integrator;
 import org.hibernate.service.spi.SessionFactoryServiceRegistry;
-import org.jboss.logging.Logger;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;

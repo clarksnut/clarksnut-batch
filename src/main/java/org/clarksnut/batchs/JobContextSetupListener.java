@@ -1,7 +1,5 @@
 package org.clarksnut.batchs;
 
-import org.jboss.logging.Logger;
-
 import javax.batch.api.listener.AbstractJobListener;
 import javax.batch.runtime.context.JobContext;
 import javax.inject.Inject;

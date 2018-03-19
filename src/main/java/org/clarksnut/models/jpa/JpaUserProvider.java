@@ -3,7 +3,6 @@ package org.clarksnut.models.jpa;
 import org.clarksnut.models.UserModel;
 import org.clarksnut.models.UserProvider;
 import org.clarksnut.models.jpa.entity.UserEntity;
-import org.hibernate.Session;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -34,40 +33,38 @@ public class JpaUserProvider extends AbstractHibernateProvider implements UserPr
         entity.setUsername(username);
         entity.setCreatedAt(Calendar.getInstance().getTime());
 
-        Session session = getSession();
-        session.persist(entity);
-        return new UserAdapter(session, entity);
+
+        em.persist(entity);
+        return new UserAdapter(em, entity);
     }
 
     @Override
     public UserModel getUser(String userId) {
-        Session session = getSession();
 
-        UserEntity entity = session.find(UserEntity.class, userId);
+
+        UserEntity entity = em.find(UserEntity.class, userId);
         if (entity == null) return null;
-        return new UserAdapter(session, entity);
+        return new UserAdapter(em, entity);
     }
 
     @Override
     public UserModel getUserByUsername(String username) {
-        Session session = getSession();
-
-        TypedQuery<UserEntity> query = session.createNamedQuery("getUserByUsername", UserEntity.class);
+        TypedQuery<UserEntity> query = em.createNamedQuery("getUserByUsername", UserEntity.class);
         query.setParameter("username", username);
         List<UserEntity> entities = query.getResultList();
         if (entities.size() == 0) return null;
-        return new UserAdapter(session, entities.get(0));
+        return new UserAdapter(em, entities.get(0));
     }
 
     @Override
     public UserModel getUserByIdentityID(String identityID) {
-        Session session = getSession();
 
-        TypedQuery<UserEntity> query = session.createNamedQuery("getUserByIdentityID", UserEntity.class);
+
+        TypedQuery<UserEntity> query = em.createNamedQuery("getUserByIdentityID", UserEntity.class);
         query.setParameter("identityID", identityID);
         List<UserEntity> entities = query.getResultList();
         if (entities.size() == 0) return null;
-        return new UserAdapter(session, entities.get(0));
+        return new UserAdapter(em, entities.get(0));
     }
 
 }

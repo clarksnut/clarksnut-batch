@@ -4,7 +4,6 @@ import org.clarksnut.models.BrokerType;
 import org.jboss.logging.Logger;
 
 import javax.ejb.Stateless;
-import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;

@@ -1,9 +1,6 @@
 package org.clarksnut.models.jpa.entity;
 
 import org.clarksnut.models.BrokerType;
-import org.hibernate.annotations.BatchSize;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;

@@ -14,12 +14,16 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.client.repackaged.org.apache.commons.codec.binary.Base64;
 import com.google.api.services.gmail.Gmail;
 import com.google.api.services.gmail.model.ListMessagesResponse;
 import com.google.api.services.gmail.model.Message;
 import com.google.api.services.gmail.model.MessagePartBody;
 import com.google.common.collect.Lists;
-import org.clarksnut.mail.*;
+import org.clarksnut.mail.MailMessageModel;
+import org.clarksnut.mail.MailProvider;
+import org.clarksnut.mail.MailQuery;
+import org.clarksnut.mail.MailVendorType;
 import org.clarksnut.mail.exceptions.MailReadException;
 import org.clarksnut.models.BrokerType;
 import org.clarksnut.models.Constants;
@@ -33,8 +37,6 @@ import javax.inject.Inject;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.*;
-
-import com.google.api.client.repackaged.org.apache.commons.codec.binary.Base64;
 
 @Stateless
 @MailVendorType(BrokerType.GOOGLE)

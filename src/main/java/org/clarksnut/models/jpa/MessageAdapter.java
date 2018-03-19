@@ -1,25 +1,19 @@
 package org.clarksnut.models.jpa;
 
 import org.clarksnut.common.jpa.JpaModel;
-import org.clarksnut.models.FileModel;
-import org.clarksnut.models.MessageModel;
 import org.clarksnut.models.MessageModel;
 import org.clarksnut.models.jpa.entity.MessageEntity;
-import org.clarksnut.models.jpa.entity.MessageEntity;
-import org.hibernate.Session;
 
 import javax.persistence.EntityManager;
 import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class MessageAdapter implements MessageModel, JpaModel<MessageEntity> {
 
-    private final Session session;
+    private final EntityManager em;
     private final MessageEntity message;
 
-    public MessageAdapter(Session session, MessageEntity message) {
-        this.session = session;
+    public MessageAdapter(EntityManager em, MessageEntity message) {
+        this.em = em;
         this.message = message;
     }
 

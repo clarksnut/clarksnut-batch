@@ -1,7 +1,6 @@
 package org.clarksnut.batchs.messages.step2;
 
 import org.clarksnut.models.jpa.entity.MessageEntity;
-import org.hibernate.Session;
 import org.jberet.support.io.JpaItemReaderWriterBase;
 
 import javax.batch.api.BatchProperty;
@@ -37,12 +36,10 @@ public class C_SaveMails extends JpaItemReaderWriterBase implements ItemWriter {
             em.getTransaction().begin();
         }
 
-        Session session = em.unwrap(Session.class);
-
         for (final Object e : items) {
             List<MessageEntity> entities = (List<MessageEntity>) e;
             for (MessageEntity entity : entities) {
-                session.persist(entity);
+                em.persist(entity);
             }
         }
 
