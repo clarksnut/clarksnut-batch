@@ -62,6 +62,11 @@ public class BrokerAdapter implements BrokerModel, JpaModel<BrokerEntity> {
     }
 
     @Override
+    public boolean isEnabled() {
+        return broker.isEnable();
+    }
+
+    @Override
     public String getToken() {
         return broker.getRefreshToken();
     }

@@ -140,13 +140,8 @@ public class GmailProvider implements MailProvider {
 
     @Override
     public boolean validate(String refreshToken) throws IOException {
-        Credential credential = new Credential.Builder(BearerToken.authorizationHeaderAccessMethod())
-                .setTransport(new NetHttpTransport())
-                .setJsonFactory(new JacksonFactory())
-                .setTokenServerUrl(new GenericUrl(Constants.GOOGLE_OAUTH2_TOKEN_SERVER_URL))
-                .setClientAuthentication(new BasicAuthentication(clarksnutGoogleBrokerClientId.orElse(""), clarksnutGoogleBrokerClientSecret.orElse("")))
-                .build()
-                .setRefreshToken(refreshToken);
+        AccessTokenResponse token = getToken(refreshToken);
+        Credential credential = buildCredential(token);
         try {
             // If true or false is returned, it means refresh token is still valid
             credential.refreshToken();
@@ -167,14 +162,18 @@ public class GmailProvider implements MailProvider {
         }
     }
 
-    private Gmail buildClient(AccessTokenResponse token) {
-        Credential credential = new Credential.Builder(BearerToken.authorizationHeaderAccessMethod())
+    private Credential buildCredential(AccessTokenResponse token) {
+        return new Credential.Builder(BearerToken.authorizationHeaderAccessMethod())
                 .setTransport(new NetHttpTransport())
                 .setJsonFactory(new JacksonFactory())
                 .setTokenServerUrl(new GenericUrl(Constants.GOOGLE_OAUTH2_TOKEN_SERVER_URL))
                 .setClientAuthentication(new BasicAuthentication(clarksnutGoogleBrokerClientId.orElse(""), clarksnutGoogleBrokerClientSecret.orElse("")))
                 .build()
                 .setRefreshToken(token.getRefreshToken());
+    }
+
+    private Gmail buildClient(AccessTokenResponse token) {
+        Credential credential = buildCredential(token);
 
         return new Gmail.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
                 .setApplicationName(applicationName)

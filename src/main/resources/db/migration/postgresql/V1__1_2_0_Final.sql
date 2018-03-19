@@ -1,7 +1,7 @@
 
     create table cn_attachment (
        id varchar(36) not null,
-        attachment_id varchar(255),
+        attachment_id varchar(500),
         filename varchar(255),
         version int4,
         message_id varchar(36),
@@ -29,7 +29,7 @@
     create table cn_message (
        id varchar(36) not null,
         message_date timestamp,
-        message_id varchar(255),
+        message_id varchar(500),
         version int4,
         broker_id varchar(36),
         primary key (id)

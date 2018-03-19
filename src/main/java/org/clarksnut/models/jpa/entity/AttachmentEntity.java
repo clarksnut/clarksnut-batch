@@ -18,7 +18,7 @@ public class AttachmentEntity implements Serializable {
     private String id;
 
     @NotNull
-    @Column(name = "attachment_id")
+    @Column(name = "attachment_id", length = 500)
     private String attachmentId;
 
     @NotNull

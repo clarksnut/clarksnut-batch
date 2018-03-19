@@ -17,4 +17,6 @@ public interface BrokerModel {
     void setUser(UserModel user);
 
     Date getCreatedAt();
+
+    boolean isEnabled();
 }

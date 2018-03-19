@@ -65,6 +65,7 @@ public class ModelToRepresentation {
         attributes.setType(model.getType().getAlias());
         attributes.setEmail(model.getEmail());
         attributes.setToken(model.getToken() != null ? "***" : null);
+        attributes.setEnabled(model.isEnabled());
         attributes.setCreatedAt(model.getCreatedAt());
 
         return rep;

@@ -61,6 +61,8 @@ public class BrokerRepresentation {
         private String email;
         private String token;
 
+        private Boolean enabled;
+
         private Date createdAt;
         private Date updatedAt;
 
@@ -103,6 +105,14 @@ public class BrokerRepresentation {
 
         public void setUpdatedAt(Date updatedAt) {
             this.updatedAt = updatedAt;
+        }
+
+        public Boolean getEnabled() {
+            return enabled;
+        }
+
+        public void setEnabled(Boolean enabled) {
+            this.enabled = enabled;
         }
     }
 

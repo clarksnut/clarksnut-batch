@@ -23,7 +23,7 @@ public class MessageEntity implements Serializable {
     private String id;
 
     @NotNull
-    @Column(name = "message_id")
+    @Column(name = "message_id", length = 500)
     private String messageId;
 
     @NotNull

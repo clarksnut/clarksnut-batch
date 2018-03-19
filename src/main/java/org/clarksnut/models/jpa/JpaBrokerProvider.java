@@ -35,6 +35,7 @@ public class JpaBrokerProvider extends AbstractHibernateProvider implements Brok
         entity.setEmail(email);
         entity.setCreatedAt(Calendar.getInstance().getTime());
         entity.setUser(UserAdapter.toEntity(user, em));
+        entity.setEnable(true);
 
         em.persist(entity);
         return new BrokerAdapter(em, entity);
