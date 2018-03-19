@@ -1,0 +1,32 @@
+sudo: required
+
+language: java
+jdk:
+  - oraclejdk8
+
+addons:
+  sonarcloud:
+    organization: w4tracking-mail-collector
+    token:
+      secure: $SONAR_TOKEN
+
+services:
+  - docker
+
+env:
+  global:
+  - MAVEN_OPTS="-Xms4096m -Xmx4096m"
+
+# Script section
+script:
+  - mvn clean test
+  - sonar-scanner
+
+after_success:
+  - mvn clean package -Pdocker
+
+deploy:
+  provider: script
+  script: bash docker_push
+  on:
+    branch: master

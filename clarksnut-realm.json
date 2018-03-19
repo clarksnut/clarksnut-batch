@@ -1,0 +1,45 @@
+{
+  "realm": "clarksnut",
+  "enabled": true,
+  "sslRequired": "external",
+  "registrationAllowed": false,
+  "requiredCredentials": [
+    "password"
+  ],
+  "roles": {
+    "realm": [
+      {
+        "name": "user"
+      }
+    ]
+  },
+  "defaultRoles": [
+    "offline_access",
+    "uma_authorization",
+    "user"
+  ],
+  "clients": [
+    {
+      "clientId": "clarksnut-restful-api",
+      "enabled": true,
+      "adminUrl": "/clarksnut-restful-api",
+      "baseUrl": "/clarksnut-restful-api",
+      "bearerOnly": true
+    },
+    {
+      "clientId": "clarksnut-mail-collector-rest-api",
+      "enabled": true,
+      "adminUrl": "/clarksnut-mail-collector-rest-api",
+      "baseUrl": "/clarksnut-mail-collector-rest-api",
+      "secret": "secret",
+      "directAccessGrantsEnabled": true,
+      "serviceAccountsEnabled": true,
+      "redirectUris": [
+        "http://localhost:8080/*",
+        "http://localhost:4200/*"
+      ],
+      "consentRequired": false
+    }
+  ],
+  "keycloakVersion": "3.4.3.Final"
+}
