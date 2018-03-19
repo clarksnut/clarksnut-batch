@@ -77,7 +77,7 @@ public class A_PullMailMessageAttachments extends JpaItemReaderWriterBase implem
         }
 
         AttachmentEntity attachment = resultList.get(readPosition++);
-        byte[] file = attachmentsMap.get(attachment.getId());
+        byte[] file = attachmentsMap.get(attachment.getAttachmentId());
 
         return new AbstractMap.SimpleEntry<>(attachment, file);
     }
