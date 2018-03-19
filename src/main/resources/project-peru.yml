@@ -15,9 +15,9 @@ clarksnut:
   broker:
     vendor:
       google:
-        clientId: "900713078973-h87kis1n76qcp0qlnhpotbj49nv75adl.apps.googleusercontent.com"
-        clientSecret: "1gjJS-Fi29FctcH9NcXInpFK"
-        redirectUris: "http://localhost:4200/_mailcollectorsettings?linked=true"
+        clientId:
+        clientSecret:
+        redirectUris:
   scheduler:
     pull:
       interval: 120
