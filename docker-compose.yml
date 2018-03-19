@@ -9,15 +9,10 @@ services:
       - KEYCLOAK_PASSWORD=admin
     ports:
       - 8081:8080
-    networks:
-      - sso
 
   clarksnut:
-      image: clarksnut/keycloak:3.4.3.Final
+      image: clarksnut/clarksnut:1.2.0.RC3
       environment:
-        - KEYCLOAK_USER=admin
-        - KEYCLOAK_PASSWORD=admin
+        - "-Dswarm.project.stage=peru"
       ports:
-        - 8081:8080
-      networks:
-        - sso
+        - 8080:8080
