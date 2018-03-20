@@ -13,7 +13,12 @@ import java.util.Set;
 })
 @NamedQueries({
         @NamedQuery(name = "getMessageByMessageIdAndBrokerId", query = "select m from MessageEntity m inner join m.broker b where b.id=:brokerId and m.messageId=:messageId"),
-        @NamedQuery(name = "batch_getAllMessagesByBrokerId", query = "select m from MessageEntity m inner join m.broker b where b.id=:brokerId order by m.messageDate")
+        @NamedQuery(name = "getAllMessagesByBrokerId", query = "select m from MessageEntity m inner join m.broker b where b.id=:brokerId order by m.messageDate")
+})
+@NamedEntityGraphs({
+        @NamedEntityGraph(name = "graph.BatchLastMessage", attributeNodes = {
+                @NamedAttributeNode("messageDate")
+        })
 })
 public class MessageEntity implements Serializable {
 

@@ -77,8 +77,10 @@ public class B_ValidateMails extends JpaItemReaderWriterBase implements ItemProc
 
     protected Optional<MessageEntity> getMessage(BrokerEntity broker, String messageId) {
         TypedQuery<MessageEntity> query = em.createNamedQuery("getMessageByMessageIdAndBrokerId", MessageEntity.class);
+
         query.setParameter("messageId", messageId);
         query.setParameter("brokerId", broker.getId());
+
         List<MessageEntity> entities = query.getResultList();
         if (entities.size() == 0) return Optional.empty();
         else return Optional.of(entities.get(0));

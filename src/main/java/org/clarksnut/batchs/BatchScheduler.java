@@ -45,10 +45,14 @@ public class BatchScheduler {
     public void init(String brokerId) {
         Properties properties = getDefaultConfig();
 
-        Query queryToValidateBrokers = em.createNamedQuery("batch_getBroker").setParameter("brokerId", brokerId);
+        Query queryToValidateBrokers = em.createNamedQuery("getBrokerById")
+                .setParameter("brokerId", brokerId)
+                .setHint("javax.persistence.loadgraph", em.getEntityGraph("graph.BatchBroker"));
         properties.put("clarksnutBeforeChunkQuery", queryToValidateBrokers);
 
-        Query queryToPullMessagesFrom = em.createNamedQuery("batch_getBroker").setParameter("brokerId", brokerId);
+        Query queryToPullMessagesFrom = em.createNamedQuery("getBrokerById")
+                .setParameter("brokerId", brokerId)
+                .setHint("javax.persistence.loadgraph", em.getEntityGraph("graph.BatchBroker"));
         properties.put("clarksnutImportFromMailChunkQuery", queryToPullMessagesFrom);
 
         Query queryToPullAttachmentsFrom = em.createNamedQuery("batch_getAllAttachmentsFromBrokerWithNoFile").setParameter("brokerId", brokerId);

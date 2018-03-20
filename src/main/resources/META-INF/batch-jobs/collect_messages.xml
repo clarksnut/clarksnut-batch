@@ -11,11 +11,12 @@
     <flow id="start" next="end">
         <step id="beforeChunk" next="importFromMailInbox">
             <chunk>
-                <reader ref="jpaItemReader">
+                <reader ref="clarksnutJpaItemReader">
                     <properties>
                         <property name="queryInstance" value="#{jobParameters['clarksnutBeforeChunkQuery']}"/>
-                        <property name="namedQuery" value="batch_getAllEnableBrokers"/>
+                        <property name="namedQuery" value="getAllEnableBrokers"/>
                         <property name="beanType" value="org.clarksnut.models.jpa.entity.BrokerEntity"/>
+                        <property name="hints" value="javax.persistence.loadgraph=graph.BatchBroker"/>
                     </properties>
                 </reader>
                 <processor ref="a_ValidateBrokersRefreshToken"/>
@@ -27,8 +28,9 @@
                 <reader ref="a_ReadMailInbox">
                     <properties>
                         <property name="queryInstance" value="#{jobParameters['clarksnutImportFromMailChunkQuery']}"/>
-                        <property name="namedQuery" value="batch_getAllEnableBrokers"/>
+                        <property name="namedQuery" value="getAllEnableBrokers"/>
                         <property name="beanType" value="org.clarksnut.models.jpa.entity.BrokerEntity"/>
+                        <property name="hints" value="javax.persistence.loadgraph=graph.BatchBroker"/>
                     </properties>
                 </reader>
                 <processor ref="b_ValidateMails"/>

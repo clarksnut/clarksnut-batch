@@ -16,8 +16,15 @@ import java.util.Set;
 @NamedQueries({
         @NamedQuery(name = "getAllBrokersByUserId", query = "select b from BrokerEntity b inner join b.user u where u.id =:userId"),
         @NamedQuery(name = "getBrokerByEmail", query = "select b from BrokerEntity b where b.email =:email"),
-        @NamedQuery(name = "batch_getBroker", query = "select b from BrokerEntity b where b.id=:brokerId"),
-        @NamedQuery(name = "batch_getAllEnableBrokers", query = "select b from BrokerEntity b where b.enable=true order by b.createdAt")
+        @NamedQuery(name = "getBrokerById", query = "select b from BrokerEntity b where b.id=:brokerId"),
+        @NamedQuery(name = "getAllEnableBrokers", query = "select b from BrokerEntity b where b.enable=true order by b.createdAt")
+})
+@NamedEntityGraphs({
+        @NamedEntityGraph(name = "graph.BatchBroker", attributeNodes = {
+                @NamedAttributeNode("email"),
+                @NamedAttributeNode("type"),
+                @NamedAttributeNode("refreshToken")
+        })
 })
 public class BrokerEntity implements Serializable {
 
