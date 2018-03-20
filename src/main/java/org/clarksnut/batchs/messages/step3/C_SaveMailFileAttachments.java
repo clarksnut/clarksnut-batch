@@ -37,9 +37,9 @@ public class C_SaveMailFileAttachments extends JpaItemReaderWriterBase implement
         }
 
         for (final Object e : items) {
-            FileEntity fileEntity = (FileEntity) e;
-            if (fileEntity != null) {
-                em.persist(fileEntity);
+            if (e != null && e instanceof FileEntity) {
+                FileEntity entity = (FileEntity) e;
+                em.merge(entity);
             }
         }
 
