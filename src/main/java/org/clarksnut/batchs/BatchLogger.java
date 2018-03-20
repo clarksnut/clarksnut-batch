@@ -27,7 +27,7 @@ public interface BatchLogger extends BasicLogger {
     void couldNotVerifyRefreshToken(BrokerType brokerType, String email);
 
     @LogMessage(level = Logger.Level.WARN)
-    @Message(id = 1003, value = "Mail message from Broker [%s: %s] and messageId [%s] was already imported.")
+    @Message(id = 1003, value = "Mail message with messageId [%s] from Broker [%s: %s] was already imported.")
     void mailMessageWasAlreadyImported(BrokerType type, String email, String messageId);
 
     @LogMessage(level = Logger.Level.DEBUG)
