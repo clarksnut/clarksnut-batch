@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.clarksnut.batchs.BatchScheduler;
 import org.clarksnut.models.*;
 import org.jberet.support._private.SupportMessages;
 import org.jboss.logging.Logger;
@@ -57,6 +58,9 @@ public class LinkOfflineGoogleBroker extends HttpServlet {
 
     @Inject
     private BrokerProvider brokerProvider;
+
+    @Inject
+    private BatchScheduler batchScheduler;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -114,7 +118,9 @@ public class LinkOfflineGoogleBroker extends HttpServlet {
                 AccessToken accessToken = principal.getKeycloakSecurityContext().getToken();
                 String username = accessToken.getPreferredUsername();
 
-                saveToken(username, token);
+                BrokerModel brokerModel = saveToken(username, token);
+                batchScheduler.init(brokerModel.getId());
+
                 resp.sendRedirect(sessionRedirect);
                 return;
             } else {

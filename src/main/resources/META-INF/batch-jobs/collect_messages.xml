@@ -13,6 +13,7 @@
             <chunk>
                 <reader ref="jpaItemReader">
                     <properties>
+                        <property name="queryInstance" value="#{jobParameters['clarksnutBeforeChunkQuery']}"/>
                         <property name="namedQuery" value="batch_getAllEnableBrokers"/>
                         <property name="beanType" value="org.clarksnut.models.jpa.entity.BrokerEntity"/>
                     </properties>
@@ -23,14 +24,26 @@
         </step>
         <step id="importFromMailInbox" next="importMailMessageAttachments">
             <chunk>
-                <reader ref="a_ReadMailInbox"/>
+                <reader ref="a_ReadMailInbox">
+                    <properties>
+                        <property name="queryInstance" value="#{jobParameters['clarksnutImportFromMailChunkQuery']}"/>
+                        <property name="namedQuery" value="batch_getAllEnableBrokers"/>
+                        <property name="beanType" value="org.clarksnut.models.jpa.entity.BrokerEntity"/>
+                    </properties>
+                </reader>
                 <processor ref="b_ValidateMails"/>
                 <writer ref="c_SaveMails"/>
             </chunk>
         </step>
         <step id="importMailMessageAttachments" next="sendFiles">
             <chunk>
-                <reader ref="a_PullMailMessageAttachments"/>
+                <reader ref="a_PullMailMessageAttachments">
+                    <properties>
+                        <property name="queryInstance" value="#{jobParameters['clarksnutImportAttachmentChunkQuery']}"/>
+                        <property name="namedQuery" value="batch_getAllAttachmentsWithNoFile"/>
+                        <property name="beanType" value="org.clarksnut.models.jpa.entity.AttachmentEntity"/>
+                    </properties>
+                </reader>
                 <processor ref="b_ValidateMailFileAttachment"/>
                 <writer ref="c_SaveMailFileAttachments"/>
             </chunk>
@@ -39,6 +52,7 @@
             <chunk>
                 <reader ref="jpaItemReader">
                     <properties>
+                        <property name="queryInstance" value="#{jobParameters['clarksnutSendFilesChunkQuery']}"/>
                         <property name="namedQuery" value="batch_getAllAttachmentsWithFileAndPendingSendStatus"/>
                         <property name="beanType" value="org.clarksnut.models.jpa.entity.AttachmentEntity"/>
                     </properties>

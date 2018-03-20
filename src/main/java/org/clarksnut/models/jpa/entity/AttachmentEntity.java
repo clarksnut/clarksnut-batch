@@ -7,8 +7,10 @@ import java.io.Serializable;
 @Entity
 @Table(name = "cn_attachment")
 @NamedQueries({
+        @NamedQuery(name = "batch_getAllAttachmentsFromBrokerWithNoFile", query = "select a from AttachmentEntity a left join a.file f join fetch a.message m join fetch m.broker b where f is null and b.id=:brokerId order by b.id"),
         @NamedQuery(name = "batch_getAllAttachmentsWithNoFile", query = "select a from AttachmentEntity a left join a.file f join fetch a.message m join fetch m.broker b where f is null order by b.id"),
         @NamedQuery(name = "batch_getAllAttachmentsWithFileAndPendingSendStatus", query = "select a from AttachmentEntity a join fetch a.sendStatus s join fetch a.file f join fetch a.message m join fetch m.broker b where s.status = org.clarksnut.models.SendStatus.WAITING_FOR_SEND and f is not null order by b.id"),
+        @NamedQuery(name = "batch_getAllAttachmentsFromBrokerWithFileAndPendingSendStatus", query = "select a from AttachmentEntity a join fetch a.sendStatus s join fetch a.file f join fetch a.message m join fetch m.broker b where s.status = org.clarksnut.models.SendStatus.WAITING_FOR_SEND and f is not null and b.id=:brokerId order by b.id"),
 })
 public class AttachmentEntity implements Serializable {
 

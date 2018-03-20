@@ -58,7 +58,7 @@ public class ClarksnutBootstrap extends HttpServlet {
         logger.info("keycloak.json saved on " + KeycloakDeploymentConfig.class.getName());
 
         // Start batch
-        batchScheduler.init();
+        batchScheduler.initScheduler();
     }
 
 }
